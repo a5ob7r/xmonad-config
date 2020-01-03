@@ -1,0 +1,36 @@
+Config {
+    font = "xft:monospace:bold:size=16:antialias=true"
+  , alpha = 180
+  , position = Bottom
+  , lowerOnStart = True
+  , hideOnStart = False
+  , allDesktops = True
+  , overrideRedirect = True
+  , pickBroadest = True
+  , persistent = False
+  , template = " %uptime% }{ %volume% | %bright% | %battery% | %date% "
+  , commands = [
+        Run Uptime [
+          "-t", "Uptime: <days>d <hours>h <minutes>m"
+        ] 30
+      , Run Brightness [
+            "-t", "Light: <percent>%"
+          , "--"
+          , "-D", "intel_backlight"
+        ] 3
+      , Run Battery [
+            "-t", "Batt: <left>% (<acstatus>)"
+          , "--Low", "10"
+          , "--High", "80"
+          , "--low", "darkred"
+          , "--normal", "darkorange"
+          , "--high", "green"
+          , "--"
+          , "-o", "<timeleft>"
+          , "-O", "<fc=#dAA520>Charging</fc>"
+          , "-i", "<fc=green>Charged</fc>"
+        ] 10
+      , Run Date "%H:%M %F(%a)" "date" 1
+      , Run Com "volume.sh" [] "volume" 3
+      ]
+}
