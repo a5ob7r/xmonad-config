@@ -23,7 +23,6 @@ Config {
           , "--Low", "10"
           , "--High", "80"
           , "--low", "darkred"
-          , "--normal", "darkorange"
           , "--high", "green"
           , "--"
           , "-o", "<timeleft>"
