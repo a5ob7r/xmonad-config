@@ -20,10 +20,10 @@ Config {
         ] 3
       , Run Battery [
             "-t", "Batt: <left>% (<acstatus>)"
-          , "--Low", "10"
-          , "--High", "80"
-          , "--low", "darkred"
-          , "--high", "green"
+          , "-L", "10"
+          , "-H", "80"
+          , "-l", "darkred"
+          , "-h", "green"
           , "--"
           , "-o", "<timeleft>"
           , "-O", "<fc=#dAA520>Charging</fc>"
