@@ -29,6 +29,9 @@ myKeys = [
          , ("<XF86Display>", spawn "xrandr --auto")
          , ("M-<Page_Up>", spawn "transset-df --actual --inc 0.05")
          , ("M-<Page_Down>", spawn "transset-df --actual --dec 0.05")
+         , ("<Print>", spawn "sh -c 'import -window root ~/Desktop/screen_shot_$(date --iso-8601=seconds).png'")
+         , ("M-<Print>", spawn "sh -c 'import ~/Desktop/screen_shot_$(date --iso-8601=seconds).png'")
+         , ("M-C-<Print>", spawn "sh -c 'import -window $(xprop -root | grep \"_NET_ACTIVE_WINDOW(WINDOW)\" | sed -e \"s/.* # //g\") ~/Desktop/screen_shot_$(date --iso-8601=seconds).png'")
          ]
 myLayoutHook = Tall 1 (3/100) (1/2) ||| Full
 myTerminal = "alacritty"
