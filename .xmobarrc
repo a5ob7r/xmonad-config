@@ -8,11 +8,12 @@ Config {
   , overrideRedirect = True
   , pickBroadest = True
   , persistent = False
-  , template = " %uptime% }{ %volume% | %bright% | %battery% | %date% "
+  , template = " %uptime% }{ %alsa:default:Master% | %bright% | %battery% | %date% "
   , commands = [
         Run Uptime [
           "-t", "Uptime: <days>d <hours>h <minutes>m"
         ] 30
+      , Run Alsa "default" "Master" []
       , Run Brightness [
             "-t", "Light: <percent>%"
           , "--"
@@ -30,6 +31,5 @@ Config {
           , "-i", "<fc=green>Charged</fc>"
         ] 10
       , Run Date "%H:%M %F(%a)" "date" 1
-      , Run Com "volume.sh" [] "volume" 3
       ]
 }
