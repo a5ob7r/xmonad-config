@@ -21,9 +21,9 @@ Config {
         ] 3
       , Run Battery [
             "-t", "Batt: <left>% (<acstatus>)"
-          , "-L", "10"
+          , "-L", "20"
           , "-H", "80"
-          , "-l", "darkred"
+          , "-l", "red"
           , "-h", "green"
           , "--"
           , "-o", "<timeleft>"
