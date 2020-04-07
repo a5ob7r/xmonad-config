@@ -9,9 +9,10 @@ Config {
   , overrideRedirect = True
   , pickBroadest = True
   , persistent = False
-  , template = " %uptime% }{ %alsa:default:Master% | %bright% | %battery% | %date% "
+  , template = " %StdinReader% }{ %uptime% | %alsa:default:Master% | %bright% | %battery% | %date% "
   , commands = [
-        Run Uptime [
+        Run StdinReader
+      , Run Uptime [
           "-t", "Uptime: <days>d <hours>h <minutes>m"
         ] 30
       , Run Alsa "default" "Master" [
