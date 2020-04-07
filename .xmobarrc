@@ -1,6 +1,7 @@
 Config {
     font = "xft:monospace:bold:size=16:antialias=true"
-  , alpha = 180
+  , bgColor = "#16242c"
+  , fgColor = "#c0c4cd"
   , position = Bottom
   , lowerOnStart = True
   , hideOnStart = False
@@ -13,7 +14,11 @@ Config {
         Run Uptime [
           "-t", "Uptime: <days>d <hours>h <minutes>m"
         ] 30
-      , Run Alsa "default" "Master" []
+      , Run Alsa "default" "Master" [
+            "--"
+          , "--onc", "#99c793"
+          , "--offc", "#ec5e66"
+        ]
       , Run Brightness [
             "-t", "Light: <percent>%"
           , "--"
@@ -23,12 +28,12 @@ Config {
             "-t", "Batt: <left>% (<acstatus>)"
           , "-L", "20"
           , "-H", "80"
-          , "-l", "red"
-          , "-h", "green"
+          , "-l", "#ec5e66"
+          , "-h", "#99c793"
           , "--"
           , "-o", "<timeleft>"
           , "-O", "<fc=#dAA520>Charging</fc>"
-          , "-i", "<fc=green>Charged</fc>"
+          , "-i", "<fc=#99c793>Charged</fc>"
         ] 10
       , Run Date "%H:%M %F(%a)" "date" 1
       ]
