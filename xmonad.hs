@@ -15,6 +15,7 @@ myConfig = ewmh def {
                     , borderWidth = myBorderWidth
                     , focusFollowsMouse = myFocusFollowsMouse
                     , layoutHook = myLayoutHook
+                    , startupHook = myStartupHook
                     }
                     `additionalKeysP` myKeys
 
@@ -34,6 +35,9 @@ myKeys = [
          , ("M-C-<Print>", spawn "sh -c 'import -window $(xprop -root | grep \"_NET_ACTIVE_WINDOW(WINDOW)\" | sed -e \"s/.* # //g\") ~/Desktop/screen_shot_$(date --iso-8601=seconds).png'")
          , ("M-x", spawn "pkill xmobar")
          ]
+myStartupHook = do
+  spawn "xsetroot -cursor_name left_ptr"
+  spawn "[ -f ~/.wallpaper ] && feh --bg-scale ~/.wallpaper"
 myLayoutHook = Tall 1 (3/100) (1/2) ||| Full
 myTerminal = "alacritty"
 myModMask = mod4Mask
