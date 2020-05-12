@@ -55,8 +55,13 @@ myFocusFollowsMouse = True
 myPP :: PP
 myPP = xmobarPP { ppSep = " | "
                 , ppCurrent = \wsId -> myXmobarColor myYellow $ "[" ++ wsId ++ "]"
-                , ppTitle = myXmobarColor myGreen
+                , ppTitle = myXmobarColor myGreen . abbrLongStr
                 }
+
+abbrLongStr :: String -> String
+abbrLongStr s = if length s >= 35
+                   then take 30 s ++ "..."
+                   else s
 
 myBar :: String
 myBar = "xmobar ~/.xmonad/.xmobarrc"
