@@ -10,10 +10,10 @@ main :: IO ()
 main = xmonad =<< statusBar myBar myPP toggleStatusBarKey myConfig
 
 myConfig :: XConfig (Choose Tall Full)
-myConfig = ewmh def { terminal = myTerminal
-                    , modMask = myModMask
-                    , borderWidth = myBorderWidth
-                    , focusFollowsMouse = myFocusFollowsMouse
+myConfig = ewmh def { terminal = "alacritty"
+                    , modMask = mod4Mask
+                    , borderWidth = 0
+                    , focusFollowsMouse = True
                     , layoutHook = myLayoutHook
                     , startupHook = myStartupHook
                     } `additionalKeysP` myKeys
@@ -42,15 +42,6 @@ myStartupHook = do
 
 myLayoutHook :: Choose Tall Full a
 myLayoutHook = Tall 1 (3/100) (1/2) ||| Full
-
-myTerminal :: String
-myTerminal = "alacritty"
-myModMask :: KeyMask
-myModMask = mod4Mask
-myBorderWidth :: Dimension
-myBorderWidth = 0
-myFocusFollowsMouse :: Bool
-myFocusFollowsMouse = True
 
 myPP :: PP
 myPP = xmobarPP { ppSep = " | "
