@@ -7,20 +7,19 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 
 main :: IO ()
-main = xmonad =<< xmobar myConfig
+main = xmonad =<< statusBar myBar myPP toggleStatusBarKey myConfig
 
-myConfig = ewmh def {
-                      terminal = myTerminal
+myConfig :: XConfig (Choose Tall Full)
+myConfig = ewmh def { terminal = myTerminal
                     , modMask = myModMask
                     , borderWidth = myBorderWidth
                     , focusFollowsMouse = myFocusFollowsMouse
                     , layoutHook = myLayoutHook
                     , startupHook = myStartupHook
-                    }
-                    `additionalKeysP` myKeys
+                    } `additionalKeysP` myKeys
 
-myKeys = [
-           ("M-p", spawn "rofi -show run")
+myKeys :: [(String, X ())]
+myKeys = [ ("M-p", spawn "rofi -show run")
          , ("<XF86MonBrightnessDown>", spawn "light -U 2")
          , ("<XF86MonBrightnessUp>", spawn "light -A 2")
          , ("<XF86AudioLowerVolume>", spawn "amixer set Master 5%-")
@@ -35,11 +34,42 @@ myKeys = [
          , ("M-C-<Print>", spawn "sh -c 'import -window $(xprop -root | grep \"_NET_ACTIVE_WINDOW(WINDOW)\" | sed -e \"s/.* # //g\") ~/Desktop/screen_shot_$(date --iso-8601=seconds).png'")
          , ("M-x", spawn "pkill xmobar")
          ]
+
+myStartupHook :: X ()
 myStartupHook = do
   spawn "xsetroot -cursor_name left_ptr"
   spawn "[ -f ~/.wallpaper ] && feh --bg-scale ~/.wallpaper"
+
+myLayoutHook :: Choose Tall Full a
 myLayoutHook = Tall 1 (3/100) (1/2) ||| Full
+
+myTerminal :: String
 myTerminal = "alacritty"
+myModMask :: KeyMask
 myModMask = mod4Mask
+myBorderWidth :: Dimension
 myBorderWidth = 0
+myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
+
+myPP :: PP
+myPP = xmobarPP { ppSep = " | "
+                , ppCurrent = \wsId -> myXmobarColor myYellow $ "[" ++ wsId ++ "]"
+                , ppTitle = myXmobarColor myGreen
+                }
+
+myBar :: String
+myBar = "xmobar ~/.xmonad/.xmobarrc"
+
+bgColor :: String
+bgColor = "#16242c"
+myGreen :: String
+myGreen = "#99c793"
+myYellow :: String
+myYellow = "#fac862"
+
+myXmobarColor :: String -> String -> String
+myXmobarColor fgColor = xmobarColor fgColor bgColor
+
+toggleStatusBarKey :: XConfig l -> (KeyMask, KeySym)
+toggleStatusBarKey XConfig { XMonad.modMask = modMask } = ( modMask, xK_b )
