@@ -1,5 +1,6 @@
 Config {
     font = "xft:monospace:bold:size=16:antialias=true"
+  , alpha = 0
   , bgColor = "#16242c"
   , fgColor = "#c0c4cd"
   , position = Bottom
