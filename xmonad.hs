@@ -7,11 +7,12 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Layout.Spacing
 import XMonad.Layout.LayoutModifier
+import XMonad.Layout.ResizableTile
 
 main :: IO ()
 main = xmonad =<< statusBar myBar myPP toggleStatusBarKey myConfig
 
-myConfig :: XConfig (ModifiedLayout Spacing (Choose Tall Full))
+myConfig :: XConfig (ModifiedLayout Spacing (Choose ResizableTall Full))
 myConfig = ewmh def { terminal = "alacritty"
                     , modMask = mod4Mask
                     , borderWidth = 0
@@ -35,6 +36,8 @@ myKeys = [ ("M-p", spawn "rofi -show run")
          , ("M-<Print>", spawn "sh -c 'import ~/Desktop/screen_shot_$(date --iso-8601=seconds).png'")
          , ("M-C-<Print>", spawn "sh -c 'import -window $(xprop -root | grep \"_NET_ACTIVE_WINDOW(WINDOW)\" | sed -e \"s/.* # //g\") ~/Desktop/screen_shot_$(date --iso-8601=seconds).png'")
          , ("M-x", spawn "pkill xmobar")
+         , ("M-a", sendMessage MirrorShrink)
+         , ("M-z", sendMessage MirrorExpand)
          ]
 
 myStartupHook :: X ()
@@ -42,8 +45,8 @@ myStartupHook = do
   spawn "xsetroot -cursor_name left_ptr"
   spawn "[ -f ~/.wallpaper ] && feh --bg-scale ~/.wallpaper"
 
-myLayoutHook :: ModifiedLayout Spacing (Choose Tall Full) a
-myLayoutHook = mySpacing $ Tall 1 (3/100) (1/2) ||| Full
+myLayoutHook :: ModifiedLayout Spacing (Choose ResizableTall Full) a
+myLayoutHook = mySpacing $ ResizableTall 1 (3/100) (1/2) [] ||| Full
 
 mySpacing :: l a -> ModifiedLayout Spacing l a
 mySpacing = spacingRaw True myBorder True myBorder True 
