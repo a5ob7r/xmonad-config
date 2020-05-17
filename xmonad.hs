@@ -5,11 +5,13 @@ import XMonad.Util.Cursor
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
+import XMonad.Layout.Spacing
+import XMonad.Layout.LayoutModifier
 
 main :: IO ()
 main = xmonad =<< statusBar myBar myPP toggleStatusBarKey myConfig
 
-myConfig :: XConfig (Choose Tall Full)
+myConfig :: XConfig (ModifiedLayout Spacing (Choose Tall Full))
 myConfig = ewmh def { terminal = "alacritty"
                     , modMask = mod4Mask
                     , borderWidth = 0
@@ -40,8 +42,18 @@ myStartupHook = do
   spawn "xsetroot -cursor_name left_ptr"
   spawn "[ -f ~/.wallpaper ] && feh --bg-scale ~/.wallpaper"
 
-myLayoutHook :: Choose Tall Full a
-myLayoutHook = Tall 1 (3/100) (1/2) ||| Full
+myLayoutHook :: ModifiedLayout Spacing (Choose Tall Full) a
+myLayoutHook = mySpacing $ Tall 1 (3/100) (1/2) ||| Full
+
+mySpacing :: l a -> ModifiedLayout Spacing l a
+mySpacing = spacingRaw True myBorder True myBorder True 
+
+myBorder :: Border
+myBorder = Border { top = 5
+                  , bottom = 5
+                  , right = 5
+                  , left = 5
+                  }
 
 myPP :: PP
 myPP = xmobarPP { ppSep = " | "
