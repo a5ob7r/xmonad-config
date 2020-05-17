@@ -45,14 +45,9 @@ myLayoutHook = Tall 1 (3/100) (1/2) ||| Full
 
 myPP :: PP
 myPP = xmobarPP { ppSep = " | "
-                , ppCurrent = \wsId -> myXmobarColor myYellow $ "[" ++ wsId ++ "]"
-                , ppTitle = myXmobarColor myGreen . abbrLongStr
+                , ppCurrent = myXmobarColor myYellow . wrap "[" "]"
+                , ppTitle = myXmobarColor myGreen . shorten 30
                 }
-
-abbrLongStr :: String -> String
-abbrLongStr s = if length s >= 35
-                   then take 30 s ++ "..."
-                   else s
 
 myBar :: String
 myBar = "xmobar ~/.xmonad/.xmobarrc"
