@@ -1,10 +1,7 @@
 import XMonad
 import XMonad.Util.EZConfig
-import XMonad.Util.Run
-import XMonad.Util.Cursor
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.ManageDocks
 import XMonad.Layout.Spacing
 import XMonad.Layout.LayoutModifier
 import XMonad.Layout.ResizableTile
