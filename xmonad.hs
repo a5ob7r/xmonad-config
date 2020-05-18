@@ -19,7 +19,8 @@ myConfig = ewmh def { terminal = "alacritty"
                     } `additionalKeysP` myKeys
 
 myKeys :: [(String, X ())]
-myKeys = [ ("M-p", spawn "rofi -show run")
+myKeys = [ ("M-r", spawn "rofi -show run")
+         , ("M-w", spawn "rofi -show window")
          , ("<XF86MonBrightnessDown>", spawn "light -U 2")
          , ("<XF86MonBrightnessUp>", spawn "light -A 2")
          , ("<XF86AudioLowerVolume>", spawn "amixer set Master 5%-")
