@@ -1,10 +1,10 @@
 import XMonad
-import XMonad.Util.EZConfig
-import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.DynamicLog
-import XMonad.Layout.Spacing
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Layout.LayoutModifier
 import XMonad.Layout.ResizableTile
+import XMonad.Layout.Spacing
+import XMonad.Util.EZConfig
 
 main :: IO ()
 main = xmonad =<< statusBar myBar myPP toggleStatusBarKey myConfig
