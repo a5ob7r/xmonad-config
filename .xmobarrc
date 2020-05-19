@@ -6,10 +6,7 @@ Config {
   , position = Bottom
   , lowerOnStart = True
   , hideOnStart = False
-  , allDesktops = True
-  , overrideRedirect = True
   , pickBroadest = True
-  , persistent = False
   , template = " %StdinReader% }{ %uptime% | %alsa:default:Master% | %bright% | %battery% | %date% "
   , commands = [
         Run StdinReader
