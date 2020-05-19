@@ -1,39 +1,34 @@
-Config {
-    font = "xft:Ricty Discord Nerd Font:bold:size=24:antialias=true,xft:monospace"
-  , alpha = 0
-  , bgColor = "#16242c"
-  , fgColor = "#c0c4cd"
-  , position = Bottom
-  , lowerOnStart = True
-  , hideOnStart = False
-  , pickBroadest = True
-  , template = " %StdinReader% }{ %uptime% | %alsa:default:Master% | %bright% | %battery% | %date% "
-  , commands = [
-        Run StdinReader
-      , Run Uptime [
-          "-t", "Uptime: <days>d <hours>h <minutes>m"
-        ] 30
-      , Run Alsa "default" "Master" [
-            "--"
-          , "--onc", "#99c793"
-          , "--offc", "#ec5e66"
-        ]
-      , Run Brightness [
-            "-t", "Light: <percent>%"
-          , "--"
-          , "-D", "intel_backlight"
-        ] 3
-      , Run Battery [
-            "-t", "Batt: <left>% (<acstatus>)"
-          , "-L", "20"
-          , "-H", "80"
-          , "-l", "#ec5e66"
-          , "-h", "#99c793"
-          , "--"
-          , "-o", "<timeleft>"
-          , "-O", "<fc=#dAA520>Charging</fc>"
-          , "-i", "<fc=#99c793>Charged</fc>"
-        ] 10
-      , Run Date "%H:%M %F(%a)" "date" 1
-      ]
-}
+Config { font = "xft:Ricty Discord Nerd Font:bold:size=24:antialias=true,xft:monospace"
+       , alpha = 0
+       , bgColor = "#16242c"
+       , fgColor = "#c0c4cd"
+       , position = Bottom
+       , lowerOnStart = True
+       , hideOnStart = False
+       , pickBroadest = True
+       , template = " %StdinReader% }{ %uptime% | %alsa:default:Master% | %bright% | %battery% | %date% "
+       , commands = [ Run StdinReader
+                    , Run Uptime [ "-t", "Uptime: <days>d <hours>h <minutes>m" ] 30
+                    , Run Alsa "default" "Master" [ "--"
+                                                  , "--onc", "#99c793"
+                                                  , "--offc", "#ec5e66"
+                                                  ]
+                    , Run Brightness [ "-t", "Light: <percent>%"
+                                     , "--"
+                                     , "-D", "intel_backlight"
+                                     ] 3
+                    , Run Battery [ "-t", "Batt: <left>% (<acstatus>)"
+                                  , "-L", "20"
+                                  , "-H", "80"
+                                  , "-l", "#ec5e66"
+                                  , "-h", "#99c793"
+                                  , "--"
+                                  , "-o", "<timeleft>"
+                                  , "-O", "<fc=#dAA520>Charging</fc>"
+                                  , "-i", "<fc=#99c793>Charged</fc>"
+                                  ] 10
+                    , Run Date "%H:%M %F(%a)" "date" 1
+                    ]
+       }
+
+-- vim: set ft=haskell :
