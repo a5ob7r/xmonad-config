@@ -36,6 +36,8 @@ myKeys = [ ("M-r", spawn "rofi -show run")
          , ("M-x", spawn "pkill xmobar")
          , ("M-a", sendMessage MirrorShrink)
          , ("M-z", sendMessage MirrorExpand)
+         , ("M-<Return>", spawn "terminal")
+         , ("M-C-<Return>", spawn "browser")
          ]
 
 myStartupHook :: X ()
