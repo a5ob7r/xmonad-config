@@ -6,9 +6,8 @@ Config { font = "xft:monospace:bold:size=24:antialias=true,xft:monospace"
        , lowerOnStart = True
        , hideOnStart = False
        , pickBroadest = True
-       , template = " %StdinReader% }{ %uptime% | %alsa:default:Master% | %bright% | %battery% | %date% "
+       , template = " %StdinReader% }{ %alsa:default:Master% | %bright% | %battery% | %date% "
        , commands = [ Run StdinReader
-                    , Run Uptime [ "-t", "Uptime: <days>d <hours>h <minutes>m" ] 30
                     , Run Alsa "default" "Master" [ "--"
                                                   , "--onc", "#99c793"
                                                   , "--offc", "#ec5e66"
