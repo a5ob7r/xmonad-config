@@ -1,3 +1,4 @@
+import Data.Char
 import XMonad
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
@@ -61,7 +62,7 @@ myBorder = Border { top = 5
 myPP :: PP
 myPP = xmobarPP { ppSep = " | "
                 , ppCurrent = myXmobarColor myYellow . wrap "[" "]"
-                , ppTitle = myXmobarColor myGreen . shorten 30
+                , ppTitle = myXmobarColor myGreen . shortenFW 50
                 }
 
 myBar :: String
@@ -79,3 +80,11 @@ myXmobarColor fgColor = xmobarColor fgColor bgColor
 
 toggleStatusBarKey :: XConfig l -> (KeyMask, KeySym)
 toggleStatusBarKey XConfig { XMonad.modMask = modMask } = ( modMask, xK_b )
+
+-- | 'shortenFW', is custom version of shorten which treats full width
+-- characters' width as double of ascii characters.
+shortenFW :: Int -> String -> String
+shortenFW n xs = let weights = map (\x -> 1 + fromEnum (not . isAscii $ x)) xs
+                     n' = length . takeWhile (<= n) . scanl1 (+) $ weights
+                     suffix = if length xs > n' then "..." else ""
+                  in take n' xs ++ suffix
