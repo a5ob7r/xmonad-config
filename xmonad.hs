@@ -1,4 +1,6 @@
 import Data.Char
+import Data.List
+
 import XMonad
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
@@ -62,7 +64,8 @@ myBorder = Border { top = 5
 myPP :: PP
 myPP = xmobarPP { ppSep = " | "
                 , ppCurrent = myXmobarColor myYellow . wrap "[" "]"
-                , ppTitle = myXmobarColor myGreen . shortenFW 50
+                , ppTitle = myXmobarColor myGreen . shortenFW 60
+                , ppLayout = convertLayoutName
                 }
 
 myBar :: String
@@ -88,3 +91,8 @@ shortenFW n xs = let weights = map (\x -> 1 + fromEnum (not . isAscii $ x)) xs
                      n' = length . takeWhile (<= n) . scanl1 (+) $ weights
                      suffix = if length xs > n' then "..." else ""
                   in take n' xs ++ suffix
+
+convertLayoutName :: String -> String
+convertLayoutName name | isInfixOf "Full" name = "Full"
+                       | isInfixOf "Tall" name = "Tall"
+                       | otherwise = "Unknown"
