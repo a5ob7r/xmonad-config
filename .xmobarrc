@@ -8,23 +8,24 @@ Config { font = "xft:monospace:bold:size=24:antialias=true,xft:monospace"
        , pickBroadest = True
        , template = " %StdinReader% }{ %alsa:default:Master% | %bright% | %battery% | %date% "
        , commands = [ Run StdinReader
-                    , Run Alsa "default" "Master" [ "--"
+                    , Run Alsa "default" "Master" [ "-t", "♪ <volume>% <status>"
+                                                  , "--"
                                                   , "--onc", "#99c793"
                                                   , "--offc", "#ec5e66"
                                                   ]
-                    , Run Brightness [ "-t", "Light: <percent>%"
+                    , Run Brightness [ "-t", "☀ <percent>%"
                                      , "--"
                                      , "-D", "intel_backlight"
                                      ] 3
-                    , Run Battery [ "-t", "Batt: <left>% (<acstatus>)"
+                    , Run Battery [ "-t", "⚡ <left>% (<acstatus>)"
                                   , "-L", "20"
                                   , "-H", "80"
                                   , "-l", "#ec5e66"
                                   , "-h", "#99c793"
                                   , "--"
                                   , "-o", "<timeleft>"
-                                  , "-O", "<fc=#dAA520>Charging</fc>"
-                                  , "-i", "<fc=#99c793>Charged</fc>"
+                                  , "-O", "<fc=#dAA520>RECH</fc>"
+                                  , "-i", "<fc=#99c793>FULL</fc>"
                                   ] 10
                     , Run Date "%H:%M %F(%a)" "date" 1
                     ]
