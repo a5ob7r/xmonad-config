@@ -79,7 +79,7 @@ myYellow :: String
 myYellow = "#fac862"
 
 myXmobarColor :: String -> String -> String
-myXmobarColor fgColor = xmobarColor fgColor bgColor
+myXmobarColor = flip xmobarColor bgColor
 
 toggleStatusBarKey :: XConfig l -> (KeyMask, KeySym)
 toggleStatusBarKey XConfig { XMonad.modMask = modMask } = ( modMask, xK_b )
