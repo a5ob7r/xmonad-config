@@ -13,12 +13,13 @@ main :: IO ()
 main = xmonad =<< statusBar myBar myPP toggleStatusBarKey myConfig
 
 myConfig :: XConfig (ModifiedLayout Spacing (Choose ResizableTall Full))
-myConfig = ewmh def { terminal = "alacritty"
-                    , modMask = mod4Mask
-                    , borderWidth = 0
+myConfig = ewmh def { borderWidth = 0
                     , focusFollowsMouse = True
                     , layoutHook = myLayoutHook
+                    , manageHook = myManageHook
+                    , modMask = mod4Mask
                     , startupHook = myStartupHook
+                    , terminal = "alacritty"
                     } `additionalKeysP` myKeys
 
 myKeys :: [(String, X ())]
@@ -96,3 +97,21 @@ convertLayoutName :: String -> String
 convertLayoutName name | isInfixOf "Full" name = "Full"
                        | isInfixOf "Tall" name = "Tall"
                        | otherwise = "Unknown"
+
+-- | Return whether or not a window is picture in picture(PIP) for Firefox.
+-- Somehow can't detect using `WM_NAME` (is title, ) that a window is PIP on
+-- Firefox. Why?
+-- ref: https://wiki.haskell.org/Xmonad/Frequently_asked_questions#I_need_to_find_the_class_title_or_some_other_X_property_of_my_program
+isPIPFF :: Query Bool
+isPIPFF = stringProperty "WM_WINDOW_ROLE" =? "PictureInPicture"
+
+-- | Return whether or not a window is picture in picture(PIP) for Chrome.
+isPIPChrome :: Query Bool
+isPIPChrome = title =? "Picture in picture"
+
+-- | Return whether or not a window is picture in picture(PIP).
+isPIP :: Query Bool
+isPIP = isPIPFF <||> isPIPChrome
+
+myManageHook :: ManageHook
+myManageHook = isPIP --> doFloat
