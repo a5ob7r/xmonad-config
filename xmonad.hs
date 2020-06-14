@@ -12,7 +12,7 @@ import XMonad.Util.EZConfig
 main :: IO ()
 main = xmonad =<< statusBar myBar myPP toggleStatusBarKey myConfig
 
-myConfig :: XConfig (ModifiedLayout Spacing (Choose ResizableTall Full))
+myConfig :: XConfig (ModifiedLayout Spacing (Choose Full ResizableTall))
 myConfig = ewmh def { borderWidth = 0
                     , focusFollowsMouse = True
                     , layoutHook = myLayoutHook
@@ -49,8 +49,8 @@ myStartupHook = do
   spawn "xsetroot -cursor_name left_ptr"
   spawn "[ -f ~/.wallpaper ] && feh --bg-scale ~/.wallpaper"
 
-myLayoutHook :: ModifiedLayout Spacing (Choose ResizableTall Full) a
-myLayoutHook = mySpacing $ ResizableTall 1 (3/100) (1/2) [] ||| Full
+myLayoutHook :: ModifiedLayout Spacing (Choose Full ResizableTall) a
+myLayoutHook = mySpacing $ Full ||| ResizableTall 1 (3/100) (1/2) []
 
 mySpacing :: l a -> ModifiedLayout Spacing l a
 mySpacing = spacingRaw True myBorder True myBorder True 
