@@ -63,9 +63,9 @@ myBorder = Border { top = 5
                   }
 
 myPP :: PP
-myPP = xmobarPP { ppSep = " | "
+myPP = xmobarPP { ppSep = wrap " " " " $ chr 57535 : []
                 , ppCurrent = myXmobarColor myYellow . wrap "[" "]"
-                , ppTitle = myXmobarColor myGreen . shortenFW 67
+                , ppTitle = myXmobarColor myGreen . shortenFW 64
                 , ppLayout = convertLayoutName
                 }
 
