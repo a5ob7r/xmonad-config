@@ -5,7 +5,6 @@ Config { font = "xft:monospace:bold:size=24:antialias=true,xft:monospace"
        , position = Bottom
        , lowerOnStart = True
        , hideOnStart = False
-       , pickBroadest = True
        , template = " %StdinReader% }{  %alsa:default:Master%  %bright%  %battery%  %date% "
        , commands = [ Run StdinReader
                     , Run Alsa "default" "Master" [ "-t", "♪ <volume>% <status>"
