@@ -1,7 +1,9 @@
 import Data.Char
 import Data.List
+import System.Environment
 
 import XMonad
+import XMonad.Actions.WindowGo
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Layout.LayoutModifier
@@ -40,8 +42,8 @@ myKeys = [ ("M-r", spawn "rofi -show run")
          , ("M-x", spawn "pkill xmobar")
          , ("M-a", sendMessage MirrorShrink)
          , ("M-z", sendMessage MirrorExpand)
-         , ("M-<Return>", spawn "terminal")
-         , ("M-C-<Return>", spawn "browser")
+         , ("M-<Return>", raiseTerminal)
+         , ("M-C-<Return>", raiseBrowser)
          ]
 
 myStartupHook :: X ()
@@ -115,3 +117,13 @@ isPIP = isPIPFF <||> isPIPChrome
 
 myManageHook :: ManageHook
 myManageHook = isPIP --> doFloat
+
+raiseTerminal :: X ()
+raiseTerminal = liftIO getTerminal >>= \term -> runOrRaise term (lowerClassName =? term)
+  where lowerClassName = fmap (map toLower) className
+
+getTerminal :: IO String
+getTerminal = fmap f $ lookupEnv "TERMINAL"
+  where f t = case t of
+                Nothing -> "alacritty"
+                Just t' -> t'
