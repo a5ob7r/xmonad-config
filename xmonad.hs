@@ -1,6 +1,7 @@
-import Data.Char
-import Data.List
-import System.Environment
+import Data.Char (chr, isAscii, toLower)
+import Data.List (isInfixOf)
+import Data.Maybe (fromMaybe)
+import System.Environment (lookupEnv)
 
 import XMonad
 import XMonad.Actions.WindowGo
@@ -55,7 +56,7 @@ myLayoutHook :: ModifiedLayout Spacing (Choose Full ResizableTall) a
 myLayoutHook = mySpacing $ Full ||| ResizableTall 1 (3/100) (1/2) []
 
 mySpacing :: l a -> ModifiedLayout Spacing l a
-mySpacing = spacingRaw True myBorder True myBorder True 
+mySpacing = spacingRaw True myBorder True myBorder True
 
 myBorder :: Border
 myBorder = Border { top = 5
@@ -65,7 +66,7 @@ myBorder = Border { top = 5
                   }
 
 myPP :: PP
-myPP = xmobarPP { ppSep = wrap " " " " $ chr 57535 : []
+myPP = xmobarPP { ppSep = wrap " " " " [chr 57535]
                 , ppCurrent = myXmobarColor myYellow . wrap "[" "]"
                 , ppTitle = myXmobarColor myGreen . shortenFW 64
                 , ppLayout = convertLayoutName
@@ -96,8 +97,8 @@ shortenFW n xs = let weights = map (\x -> 1 + fromEnum (not . isAscii $ x)) xs
                   in take n' xs ++ suffix
 
 convertLayoutName :: String -> String
-convertLayoutName name | isInfixOf "Full" name = "Full"
-                       | isInfixOf "Tall" name = "Tall"
+convertLayoutName name | name `isInfixOf` "Full" = "Full"
+                       | name `isInfixOf` "Tall" = "Tall"
                        | otherwise = "Unknown"
 
 -- | Return whether or not a window is picture in picture(PIP) for Firefox.
@@ -123,7 +124,4 @@ raiseTerminal = liftIO getTerminal >>= \term -> runOrRaise term (lowerClassName 
   where lowerClassName = fmap (map toLower) className
 
 getTerminal :: IO String
-getTerminal = fmap f $ lookupEnv "TERMINAL"
-  where f t = case t of
-                Nothing -> "alacritty"
-                Just t' -> t'
+getTerminal = fromMaybe "alacritty" <$> lookupEnv "TERMINAL"
