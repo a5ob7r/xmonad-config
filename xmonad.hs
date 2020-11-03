@@ -97,8 +97,8 @@ shortenFW n xs = let weights = map (\x -> 1 + fromEnum (not . isAscii $ x)) xs
                   in take n' xs ++ suffix
 
 convertLayoutName :: String -> String
-convertLayoutName name | name `isInfixOf` "Full" = "Full"
-                       | name `isInfixOf` "Tall" = "Tall"
+convertLayoutName name | "Full" `isInfixOf` name = "Full"
+                       | "Tall" `isInfixOf` name = "Tall"
                        | otherwise = "Unknown"
 
 -- | Return whether or not a window is picture in picture(PIP) for Firefox.
