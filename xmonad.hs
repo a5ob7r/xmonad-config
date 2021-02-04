@@ -1,3 +1,5 @@
+module Main where
+
 import Data.Char (chr, isAscii, toLower)
 import Data.List (isInfixOf)
 import Data.Maybe (fromMaybe)
@@ -7,6 +9,7 @@ import XMonad.Actions.WindowGo
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Layout.LayoutModifier
+import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spacing
 import XMonad.Util.EZConfig
@@ -14,11 +17,10 @@ import XMonad.Util.EZConfig
 main :: IO ()
 main = xmonad =<< statusBar myBar myPP toggleStatusBarKey myConfig
 
-myConfig :: XConfig (ModifiedLayout Spacing (Choose Full ResizableTall))
 myConfig =
   ewmh
     def
-      { borderWidth = 5,
+      { borderWidth = 1,
         focusFollowsMouse = True,
         layoutHook = myLayoutHook,
         manageHook = myManageHook,
@@ -56,8 +58,10 @@ myStartupHook = do
   spawn "xsetroot -cursor_name left_ptr"
   spawn "[ -f ~/.wallpaper ] && feh --bg-scale ~/.wallpaper"
 
-myLayoutHook :: ModifiedLayout Spacing (Choose Full ResizableTall) a
-myLayoutHook = mySpacing $ Full ||| ResizableTall 1 (3 / 100) (1 / 2) []
+myLayoutHook = full ||| tall
+  where
+    full = noBorders Full
+    tall = mySpacing $ ResizableTall 1 (3 / 100) (1 / 2) []
 
 mySpacing :: l a -> ModifiedLayout Spacing l a
 mySpacing = spacingRaw True myBorder True myBorder True
