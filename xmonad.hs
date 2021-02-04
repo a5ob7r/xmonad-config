@@ -5,6 +5,7 @@ import Data.List (isInfixOf)
 import Data.Maybe (fromMaybe)
 import System.Environment (lookupEnv)
 import XMonad
+import XMonad.Actions.CopyWindow
 import XMonad.Actions.WindowGo
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
@@ -46,11 +47,12 @@ myKeys =
     ("<Print>", spawn "sh -c 'import -window root ~/Desktop/screen_shot_$(date --iso-8601=seconds).png'"),
     ("M-<Print>", spawn "sh -c 'import ~/Desktop/screen_shot_$(date --iso-8601=seconds).png'"),
     ("M-C-<Print>", spawn "sh -c 'import -window $(xprop -root | grep \"_NET_ACTIVE_WINDOW(WINDOW)\" | sed -e \"s/.* # //g\") ~/Desktop/screen_shot_$(date --iso-8601=seconds).png'"),
-    ("M-x", spawn "pkill xmobar"),
     ("M-a", sendMessage MirrorShrink),
     ("M-z", sendMessage MirrorExpand),
     ("M-<Return>", raiseTerminal),
-    ("M-C-<Return>", raiseBrowser)
+    ("M-C-<Return>", raiseBrowser),
+    ("M-v", windows copyToAll),
+    ("M-x", killAllOtherCopies)
   ]
 
 myStartupHook :: X ()
