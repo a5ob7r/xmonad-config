@@ -80,7 +80,7 @@ myPP =
   xmobarPP
     { ppSep = wrap " " " " [chr 57535],
       ppCurrent = myXmobarColor myYellow . wrap "[" "]",
-      ppTitle = myXmobarColor myGreen . shortenFW 64,
+      ppTitle = myXmobarColor myGreen . shortenFW 60,
       ppLayout = convertLayoutName
     }
 
