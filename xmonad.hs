@@ -3,6 +3,7 @@ module Main where
 import Data.Char (chr, isAscii, toLower)
 import Data.List (isInfixOf)
 import Data.Maybe (fromMaybe)
+import Graphics.X11.ExtraTypes.XF86
 import System.Environment (lookupEnv)
 import XMonad
 import XMonad.Actions.CopyWindow
@@ -25,34 +26,37 @@ myConfig =
         focusFollowsMouse = True,
         layoutHook = myLayoutHook,
         manageHook = myManageHook,
-        modMask = mod4Mask,
+        modMask = myModMask,
         startupHook = myStartupHook,
         terminal = "alacritty"
       }
-    `additionalKeysP` myKeys
+    `additionalKeys` myKeys
 
-myKeys :: [(String, X ())]
+myModMask :: KeyMask
+myModMask = mod4Mask
+
+myKeys :: [((KeyMask, KeySym), X ())]
 myKeys =
-  [ ("M-r", spawn "rofi -show run"),
-    ("M-w", spawn "rofi -show window"),
-    ("<XF86MonBrightnessDown>", spawn "light -U 2"),
-    ("<XF86MonBrightnessUp>", spawn "light -A 2"),
-    ("<XF86AudioLowerVolume>", spawn "amixer set Master 5%-"),
-    ("<XF86AudioRaiseVolume>", spawn "amixer set Master 5%+"),
-    ("<XF86AudioMute>", spawn "amixer set Master toggle"),
-    ("<XF86AudioMicMute>", spawn "amixer sset Capture toggle"),
-    ("<XF86Display>", spawn "xrandr --auto"),
-    ("M-<Page_Up>", spawn "transset-df --actual --inc 0.05"),
-    ("M-<Page_Down>", spawn "transset-df --actual --dec 0.05"),
-    ("<Print>", spawn "sh -c 'import -window root ~/Desktop/screen_shot_$(date --iso-8601=seconds).png'"),
-    ("M-<Print>", spawn "sh -c 'import ~/Desktop/screen_shot_$(date --iso-8601=seconds).png'"),
-    ("M-C-<Print>", spawn "sh -c 'import -window $(xprop -root | grep \"_NET_ACTIVE_WINDOW(WINDOW)\" | sed -e \"s/.* # //g\") ~/Desktop/screen_shot_$(date --iso-8601=seconds).png'"),
-    ("M-a", sendMessage MirrorShrink),
-    ("M-z", sendMessage MirrorExpand),
-    ("M-<Return>", raiseTerminal),
-    ("M-C-<Return>", raiseBrowser),
-    ("M-v", windows copyToAll),
-    ("M-x", killAllOtherCopies)
+  [ ((myModMask, xK_r), spawn "rofi -show run"),
+    ((myModMask, xK_w), spawn "rofi -show window"),
+    ((noModMask, xF86XK_MonBrightnessUp), spawn "light -U 2"),
+    ((noModMask, xF86XK_MonBrightnessDown), spawn "light -A 2"),
+    ((noModMask, xF86XK_AudioLowerVolume), spawn "amixer set Master 5%-"),
+    ((noModMask, xF86XK_AudioRaiseVolume), spawn "amixer set Master 5%+"),
+    ((noModMask, xF86XK_AudioMute), spawn "amixer set Master toggle"),
+    ((noModMask, xF86XK_AudioMicMute), spawn "amixer sset Capture toggle"),
+    ((noModMask, xF86XK_Display), spawn "xrandr --auto"),
+    ((myModMask, xK_KP_Page_Up), spawn "transset-df --actual --inc 0.05"),
+    ((myModMask, xK_KP_Page_Down), spawn "transset-df --actual --dec 0.05"),
+    ((noModMask, xK_Print), spawn "sh -c 'import -window root ~/Desktop/screen_shot_$(date --iso-8601=seconds).png'"),
+    ((myModMask, xK_Print), spawn "sh -c 'import ~/Desktop/screen_shot_$(date --iso-8601=seconds).png'"),
+    ((myModMask .|. controlMask, xK_Print), spawn "sh -c 'import -window $(xprop -root | grep \"_NET_ACTIVE_WINDOW(WINDOW)\" | sed -e \"s/.* # //g\") ~/Desktop/screen_shot_$(date --iso-8601=seconds).png'"),
+    ((myModMask, xK_a), sendMessage MirrorShrink),
+    ((myModMask, xK_z), sendMessage MirrorExpand),
+    ((myModMask, xK_Return), raiseTerminal),
+    ((myModMask .|. controlMask, xK_Return), raiseBrowser),
+    ((myModMask, xK_v), windows copyToAll),
+    ((myModMask, xK_x), killAllOtherCopies)
   ]
 
 myStartupHook :: X ()
