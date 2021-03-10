@@ -22,9 +22,7 @@ main = xmonad =<< statusBar myBar myPP toggleStatusBarKey myConfig
 myConfig =
   ewmh
     def
-      { borderWidth = 1,
-        focusFollowsMouse = True,
-        layoutHook = myLayoutHook,
+      { layoutHook = myLayoutHook,
         manageHook = myManageHook,
         modMask = myModMask,
         startupHook = myStartupHook,
@@ -67,7 +65,10 @@ myStartupHook = do
 myLayoutHook = full ||| tall
   where
     full = noBorders Full
-    tall = mySpacing $ ResizableTall 1 (3 / 100) (1 / 2) []
+    tall = mySpacing $ ResizableTall nMaster delta ratio []
+    nMaster = 1
+    delta = 3 / 100
+    ratio = 1 / 2
 
 mySpacing :: l a -> ModifiedLayout Spacing l a
 mySpacing = spacingRaw True myBorder True myBorder True
