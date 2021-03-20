@@ -37,8 +37,8 @@ myKeys :: [((KeyMask, KeySym), X ())]
 myKeys =
   [ ((myModMask, xK_r), spawn "rofi -show run"),
     ((myModMask, xK_w), spawn "rofi -show window"),
-    ((noModMask, xF86XK_MonBrightnessUp), spawn "light -U 2"),
-    ((noModMask, xF86XK_MonBrightnessDown), spawn "light -A 2"),
+    ((noModMask, xF86XK_MonBrightnessUp), spawn "light -A 2"),
+    ((noModMask, xF86XK_MonBrightnessDown), spawn "light -U 2"),
     ((noModMask, xF86XK_AudioLowerVolume), spawn "amixer set Master 5%-"),
     ((noModMask, xF86XK_AudioRaiseVolume), spawn "amixer set Master 5%+"),
     ((noModMask, xF86XK_AudioMute), spawn "amixer set Master toggle"),
