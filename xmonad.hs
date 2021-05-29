@@ -14,6 +14,11 @@ import XMonad.Layout.LayoutModifier
 import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spacing
+import XMonad.Prompt
+import XMonad.Prompt.FuzzyMatch
+import XMonad.Prompt.Shell
+import XMonad.Prompt.Window
+import XMonad.Prompt.XMonad
 import XMonad.Util.EZConfig
 
 main :: IO ()
@@ -35,8 +40,9 @@ myModMask = mod4Mask
 
 myKeys :: [((KeyMask, KeySym), X ())]
 myKeys =
-  [ ((myModMask, xK_r), spawn "rofi -show run"),
-    ((myModMask, xK_w), spawn "rofi -show window"),
+  [ ((myModMask, xK_r), shellPrompt myXPConfig),
+    ((myModMask .|. controlMask, xK_r), xmonadPrompt myXPConfig),
+    ((myModMask, xK_w), windowPrompt myXPConfig Goto allWindows),
     ((noModMask, xF86XK_MonBrightnessUp), spawn "light -A 2"),
     ((noModMask, xF86XK_MonBrightnessDown), spawn "light -U 2"),
     ((noModMask, xF86XK_AudioLowerVolume), spawn "amixer set Master 5%-"),
@@ -94,8 +100,8 @@ myPP =
 myBar :: String
 myBar = "xmobar ~/.xmonad/.xmobarrc"
 
-bgColor :: String
-bgColor = "#16242c"
+myBgColor :: String
+myBgColor = "#16242c"
 
 myGreen :: String
 myGreen = "#99c793"
@@ -104,7 +110,7 @@ myYellow :: String
 myYellow = "#fac862"
 
 myXmobarColor :: String -> String -> String
-myXmobarColor = flip xmobarColor bgColor
+myXmobarColor = flip xmobarColor myBgColor
 
 toggleStatusBarKey :: XConfig l -> (KeyMask, KeySym)
 toggleStatusBarKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
@@ -149,3 +155,14 @@ raiseTerminal = liftIO getTerminal >>= \term -> runOrRaise term (lowerClassName 
 
 getTerminal :: IO String
 getTerminal = fromMaybe "alacritty" <$> lookupEnv "TERMINAL"
+
+-- Change font config if doesn't show prompt with 'def'.
+myXPConfig :: XPConfig
+myXPConfig =
+  def
+    { font = "xft:monospace:size=30:antialias=ture",
+      position = Top,
+      height = 70,
+      searchPredicate = fuzzyMatch,
+      sorter = fuzzySort
+    }
