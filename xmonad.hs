@@ -31,12 +31,14 @@ myConfig =
         manageHook = myManageHook,
         modMask = myModMask,
         startupHook = myStartupHook,
-        terminal = "alacritty"
+        terminal = myTerminal
       }
     `additionalKeys` myKeys
 
 myModMask :: KeyMask
 myModMask = mod4Mask
+
+myTerminal = "alacritty"
 
 myKeys :: [((KeyMask, KeySym), X ())]
 myKeys =
@@ -154,7 +156,7 @@ raiseTerminal = liftIO getTerminal >>= \term -> runOrRaise term (lowerClassName 
     lowerClassName = fmap (map toLower) className
 
 getTerminal :: IO String
-getTerminal = fromMaybe "alacritty" <$> lookupEnv "TERMINAL"
+getTerminal = fromMaybe myTerminal <$> lookupEnv "TERMINAL"
 
 -- Change font config if doesn't show prompt with 'def'.
 myXPConfig :: XPConfig
