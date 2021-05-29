@@ -12,6 +12,7 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Layout.LayoutModifier
 import XMonad.Layout.NoBorders
+import XMonad.Layout.Renamed
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spacing
 import XMonad.Prompt
@@ -73,8 +74,8 @@ myStartupHook = do
 
 myLayoutHook = full ||| tall
   where
-    full = noBorders Full
-    tall = mySpacing $ ResizableTall nMaster delta ratio []
+    full = renamed [Replace "Full"] $ noBorders Full
+    tall = renamed [Replace "Tall"] . mySpacing $ ResizableTall nMaster delta ratio []
     nMaster = 1
     delta = 3 / 100
     ratio = 1 / 2
@@ -96,8 +97,7 @@ myPP =
   xmobarPP
     { ppSep = wrap " " " " [chr 57535],
       ppCurrent = myXmobarColor myYellow . wrap "[" "]",
-      ppTitle = myXmobarColor myGreen . shortenFW 60,
-      ppLayout = convertLayoutName
+      ppTitle = myXmobarColor myGreen . shortenFW 60
     }
 
 myBar :: String
@@ -126,12 +126,6 @@ shortenFW n xs =
       n' = length . takeWhile (<= n) . scanl1 (+) $ weights
       suffix = if length xs > n' then "..." else ""
    in take n' xs ++ suffix
-
-convertLayoutName :: String -> String
-convertLayoutName name
-  | "Full" `isInfixOf` name = "Full"
-  | "Tall" `isInfixOf` name = "Tall"
-  | otherwise = "Unknown"
 
 -- | Return whether or not a window is picture in picture(PIP) for Firefox.
 -- Somehow can't detect using `WM_NAME` (is title, ) that a window is PIP on
