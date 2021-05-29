@@ -38,6 +38,7 @@ myConfig =
 myModMask :: KeyMask
 myModMask = mod4Mask
 
+myTerminal :: String
 myTerminal = "alacritty"
 
 myKeys :: [((KeyMask, KeySym), X ())]
