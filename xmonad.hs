@@ -132,7 +132,11 @@ shortenFW n xs =
 -- Firefox. Why?
 -- ref: https://wiki.haskell.org/Xmonad/Frequently_asked_questions#I_need_to_find_the_class_title_or_some_other_X_property_of_my_program
 isPIPFF :: Query Bool
-isPIPFF = stringProperty "WM_WINDOW_ROLE" =? "PictureInPicture"
+isPIPFF = q1 <||> q2
+  where
+    -- Since Firefox Developer Edition Ver. 90.0*.
+    q1 = title =? "Picture-in-Picture"
+    q2 = stringProperty "WM_WINDOW_ROLE" =? "PictureInPicture"
 
 -- | Return whether or not a window is picture in picture(PIP) for Chrome.
 isPIPChrome :: Query Bool
