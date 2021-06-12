@@ -15,12 +15,17 @@ $ cabal install X11 --lib
 # Install git version.
 $ git clone https://github.com/xmonad/xmonad.git
 $ git clone https://github.com/xmonad/xmonad-contrib.git
-$ cabal install xmonad xmonad-contrib --overwrite-policy=always -O2 --lib
+
+$ cd /path/to/xmonad
+# Install xmonad command.
+$ cabal install --overwrite-policy=always
+
+$ cd /path/to/xmonad-contrib
+# Install xmonad libraries.
+$ cabal install xmonad xmonad-contrib --overwrite-policy=always --lib xmonad xmonad-contrib X11
 
 $ git clone https://github.com/jaor/xmobar.git
-$ cabal install xmobar --overwrite-policy=always -O2 --lib
-
-$ cabal install X11 --overwrite-policy=always -O2 --lib
+$ cabal install xmobar --overwrite-policy=always --lib
 ```
 
 ### Deploy config
