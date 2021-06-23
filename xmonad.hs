@@ -28,7 +28,8 @@ main = xmonad =<< statusBar myBar myPP toggleStatusBarKey myConfig
 myConfig =
   ewmh
     def
-      { layoutHook = myLayoutHook,
+      { focusedBorderColor = myRed,
+        layoutHook = myLayoutHook,
         manageHook = myManageHook,
         modMask = myModMask,
         startupHook = myStartupHook,
@@ -105,6 +106,9 @@ myBar = "xmobar ~/.xmonad/.xmobarrc"
 
 myBgColor :: String
 myBgColor = "#16242c"
+
+myRed :: String
+myRed = "#ec5e66"
 
 myGreen :: String
 myGreen = "#99c793"
