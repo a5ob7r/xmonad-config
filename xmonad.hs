@@ -7,6 +7,7 @@ import Graphics.X11.ExtraTypes.XF86
 import System.Environment (lookupEnv)
 import XMonad
 import XMonad.Actions.CopyWindow
+import XMonad.Actions.EasyMotion (selectWindow)
 import XMonad.Actions.WindowGo
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
@@ -20,6 +21,7 @@ import XMonad.Prompt.FuzzyMatch
 import XMonad.Prompt.Shell
 import XMonad.Prompt.Window
 import XMonad.Prompt.XMonad
+import qualified XMonad.StackSet as W
 import XMonad.Util.EZConfig
 
 main :: IO ()
@@ -65,7 +67,8 @@ myKeys =
     ((myModMask, xK_Return), raiseTerminal),
     ((myModMask .|. controlMask, xK_Return), raiseBrowser),
     ((myModMask, xK_v), windows copyToAll),
-    ((myModMask, xK_x), killAllOtherCopies)
+    ((myModMask, xK_x), killAllOtherCopies),
+    ((myModMask, xK_f), selectWindow def >>= (`whenJust` windows . W.focusWindow))
   ]
 
 myStartupHook :: X ()
