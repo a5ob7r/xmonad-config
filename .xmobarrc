@@ -3,8 +3,6 @@ Config { font = "xft:monospace:bold:size=24:antialias=true,xft:monospace"
        , bgColor = "#16242c"
        , fgColor = "#c0c4cd"
        , position = Bottom
-       , lowerOnStart = True
-       , hideOnStart = False
        , template = " %StdinReader% }{  %alsa:default:Master%  %bright%  %battery%  %date% "
        , commands = [ Run StdinReader
                     , Run Alsa "default" "Master" [ "-t", "♪ <volume>% <status>"
