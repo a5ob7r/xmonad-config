@@ -1,0 +1,181 @@
+#!/bin/bash
+
+set -Ceuo pipefail
+
+has () {
+  type "$1" &>/dev/null
+}
+
+wrap () {
+  while read -r; do
+    echo -e "${1}${REPLY}${2}"
+  done
+}
+
+error () {
+  local left right
+
+  if [[ -t 2 ]]; then
+    left='\033[31m'
+    right='\033[0m'
+  fi
+
+  wrap "$left" "$right" <<<"$*" >&2
+}
+
+warning () {
+  local left right
+
+  if [[ -t 2 ]]; then
+    left='\033[33m'
+    right='\033[0m'
+  fi
+
+  wrap "$left" "$right" <<<"$*" >&2
+}
+
+_fgrep () {
+  while read -r; do
+    if [[ "$REPLY" == *"$1"* ]]; then
+      echo "$REPLY"
+    fi
+  done
+}
+
+_dirname () {
+  local file="$1"
+  while [[ "$file" == //* ]]; do
+    file="${file#/}"
+  done
+  while [[ "$file" == */ ]]; do
+    file="${file%/}"
+  done
+
+  if [[ "$file" != */* ]]; then
+    echo .
+    return 0
+  fi
+
+  file="${file%/*}"
+
+  if [[ -z "$file" ]]; then
+    echo /
+  else
+    echo "$file"
+  fi
+}
+
+datetime () {
+  printf '%(%FT%T%z)T'
+}
+
+active_window_id () {
+  if ! has xprop; then
+    error "Not found 'xprop' on PATH."
+    return 1
+  fi
+
+  xprop -root | _fgrep '_NET_ACTIVE_WINDOW(WINDOW): window id # ' | {
+    read -r
+    echo "${REPLY#* # }"
+  }
+}
+
+usage () {
+  echo -n "\
+Descriptions:
+  Take screenshot for X using import, which is a part command of imagemagick.
+
+Usages:
+  xscreenshot <subcommnad> [-o <path/to/file>|--output=<path/to/file>]
+
+  If no subcommand is specified, assumes that 'root' is specified.
+
+Subcommands:
+  root:     Capture root window.
+  active:   Capture current active window.
+  rect:     Capture rectangle area which is specified by you.
+
+Options:
+  -o, --output=/path/to/output
+                Specify output file location.
+  -h, --help    Show this message and exit.
+"
+}
+
+# main
+
+declare xscreenshot_root="${XSCREENSHOT_ROOT:-$HOME/Desktop}"
+declare action=''
+declare output=''
+
+while (( $# )); do
+  case "$1" in
+    --debug )
+      set -x
+      shift
+      ;;
+    -h | --help )
+      usage
+      exit 0
+      ;;
+    -o )
+      output="$2"
+      shift 2
+      ;;
+    --output=* )
+      output="${1#--output=}"
+      shift
+      ;;
+    root | active | rect )
+      action="$1"
+      shift
+      ;;
+    * )
+      error "Invalid option: $1"
+      exit 1
+      ;;
+  esac
+done
+
+if ! has import; then
+  error "Not fount 'import' command, which is a part of imagemagick, on PATH."
+  exit 1
+fi
+
+if [[ -z "$action" ]]; then
+  action=root
+fi
+
+if [[ -z "$output" ]]; then
+  output="${xscreenshot_root}/screen_shot_$(datetime).png"
+fi
+
+declare screenshot_root
+screenshot_root="$(_dirname "$output")"
+
+if [[ ! -d "$screenshot_root" ]]; then
+  error "No such directory exists: $screenshot_root."
+  exit 1
+fi
+
+if ! [[ -w "$screenshot_root" && -x "$screenshot_root" ]]; then
+  error "No writable or executable permission: $screenshot_root."
+  exit 1
+fi
+
+case "$action" in
+  root )
+    import -window root "$output"
+    ;;
+  active )
+    import -window "$(active_window_id)" "$output"
+    ;;
+  rect )
+    import "$output"
+    ;;
+  * )
+    error "Invalid action: $action."
+    exit 1
+    ;;
+esac
