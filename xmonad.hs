@@ -159,7 +159,7 @@ myManageHook = isPIP --> doFloat
 raiseTerminal :: X ()
 raiseTerminal = liftIO getTerminal >>= \term -> runOrRaise term (lowerClassName =? term)
   where
-    lowerClassName = fmap (map toLower) className
+    lowerClassName = fmap (map toLower) appName
 
 getTerminal :: IO String
 getTerminal = fromMaybe myTerminal <$> lookupEnv "TERMINAL"
