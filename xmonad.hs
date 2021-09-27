@@ -11,6 +11,7 @@ import XMonad.Actions.EasyMotion (selectWindow)
 import XMonad.Actions.WindowGo
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
+import XMonad.Layout.IfMax
 import XMonad.Layout.LayoutModifier
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed
@@ -76,10 +77,11 @@ myStartupHook = do
   spawn "xsetroot -cursor_name left_ptr"
   spawn "[ -f ~/.wallpaper ] && feh --bg-scale ~/.wallpaper"
 
-myLayoutHook = full ||| tall
+myLayoutHook = full ||| tall ||| htall
   where
     full = renamed [Replace "Full"] $ noBorders Full
-    tall = renamed [Replace "Tall"] . mySpacing $ ResizableTall nMaster delta ratio []
+    tall = renamed [Replace "Tall"] . IfMax 1 full . mySpacing $ ResizableTall nMaster delta ratio []
+    htall = renamed [Replace "HTall"] . IfMax 1 full . mySpacing $ ResizableTall 0 delta ratio []
     nMaster = 1
     delta = 3 / 100
     ratio = 1 / 2
