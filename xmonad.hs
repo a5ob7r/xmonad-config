@@ -1,7 +1,10 @@
 module Main where
 
+import Control.Monad (when)
 import Data.Char (chr, isAscii, toLower)
+import Data.Functor ((<&>))
 import Data.List (isInfixOf)
+import Data.Map.Strict (member)
 import Data.Maybe (fromMaybe)
 import Graphics.X11.ExtraTypes.XF86
 import System.Environment (lookupEnv)
@@ -71,7 +74,9 @@ myKeys =
     ((myModMask .|. controlMask, xK_Return), raiseBrowser),
     ((myModMask, xK_v), windows copyToAll),
     ((myModMask, xK_x), killAllOtherCopies),
-    ((myModMask, xK_f), selectWindow def >>= (`whenJust` windows . W.focusWindow))
+    ((myModMask, xK_f), selectWindow def >>= (`whenJust` windows . W.focusWindow)),
+    ((myModMask, xK_j), windows W.focusDown >> whenX isCurrentActiveFloating (windows W.focusDown)),
+    ((myModMask, xK_k), windows W.focusUp >> whenX isCurrentActiveFloating (windows W.focusUp))
   ]
 
 myStartupHook :: X ()
@@ -185,3 +190,12 @@ execScriptHook :: String -> X ()
 execScriptHook hook = do
   xmonadDir <- asks (cfgDir . directories)
   spawn $ xmonadDir </> "hooks" </> hook
+
+-- Whether or not current active window is floating.
+isCurrentActiveFloating :: X Bool
+isCurrentActiveFloating = do
+  s <- get
+  let w = fmap W.focus . W.stack . W.workspace . W.current $ windowset s
+  case w of
+    Just w -> pure . member w . W.floating $ windowset s
+    Nothing -> pure False
