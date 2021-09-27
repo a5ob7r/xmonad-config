@@ -24,6 +24,7 @@ import XMonad.Prompt.Shell
 import XMonad.Prompt.Window
 import XMonad.Prompt.XMonad
 import qualified XMonad.StackSet as W
+import XMonad.Util.Cursor
 import XMonad.Util.EZConfig
 
 main :: IO ()
@@ -75,7 +76,7 @@ myKeys =
 
 myStartupHook :: X ()
 myStartupHook = do
-  spawn "xsetroot -cursor_name left_ptr"
+  setDefaultCursor xC_left_ptr
   execScriptHook "wallpaper"
 
 myLayoutHook = full ||| tall ||| htall
