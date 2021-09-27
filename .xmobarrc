@@ -3,7 +3,7 @@ Config { font = "xft:monospace:bold:size=24:antialias=true,xft:monospace"
        , bgColor = "#16242c"
        , fgColor = "#c0c4cd"
        , position = Bottom
-       , template = " %StdinReader% }{ <fc=#65727d>|</fc> %alsa:default:Master% <fc=#65727d>|</fc> %bright% <fc=#65727d>|</fc> %battery% <fc=#65727d>|</fc> %date% "
+       , template = " %StdinReader% }{ <fc=#65727d>|</fc> %memory% <fc=#65727d>|</fc> %cpu% <fc=#65727d>|</fc> %alsa:default:Master% <fc=#65727d>|</fc> %bright% <fc=#65727d>|</fc> %battery% <fc=#65727d>|</fc> %date% "
        , commands = [ Run StdinReader
                     , Run Alsa "default" "Master" [ "-t", "<fc=#fac862>♪</fc> <volume>% <status>"
                                                   , "--"
@@ -25,6 +25,12 @@ Config { font = "xft:monospace:bold:size=24:antialias=true,xft:monospace"
                                   , "-i", "<fc=#99c793>FULL</fc>"
                                   ] 10
                     , Run Date "<fc=#fac862>D</fc> %H:%M %F(%a)" "date" 1
+                    , Run Cpu [ "--template", "<fc=#fac862>C</fc> <total>%"
+                              , "--low", "#99c793"
+                              , "--normal", "#fac862"
+                              , "--high", "#ec5e66"
+                              ] 5
+                    , Run Memory [ "--template", "<fc=#fac862>M</fc> <usedratio>% (<cache>M)" ] 5
                     ]
        }
 
