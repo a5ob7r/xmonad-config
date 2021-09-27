@@ -99,7 +99,7 @@ myBorder =
 myPP :: PP
 myPP =
   xmobarPP
-    { ppSep = wrap " " " " [chr 57535],
+    { ppSep = " <fc=#65727d>|</fc> ",
       ppCurrent = myXmobarColor myYellow . wrap "[" "]",
       ppTitle = myXmobarColor myGreen . shortenFW 60
     }
