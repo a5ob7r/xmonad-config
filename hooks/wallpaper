@@ -1,0 +1,10 @@
+#!/bin/bash
+# Set wallpaper using feh.
+
+has () {
+  type "$1" &>/dev/null
+}
+
+if has feh && [[ -r ~/.wallpaper ]]; then
+  feh --no-fehbg --bg-scale ~/.wallpaper
+fi

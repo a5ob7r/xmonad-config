@@ -5,6 +5,7 @@ import Data.List (isInfixOf)
 import Data.Maybe (fromMaybe)
 import Graphics.X11.ExtraTypes.XF86
 import System.Environment (lookupEnv)
+import System.FilePath.Posix ((</>))
 import XMonad
 import XMonad.Actions.CopyWindow
 import XMonad.Actions.EasyMotion (selectWindow)
@@ -75,7 +76,7 @@ myKeys =
 myStartupHook :: X ()
 myStartupHook = do
   spawn "xsetroot -cursor_name left_ptr"
-  spawn "[ -f ~/.wallpaper ] && feh --bg-scale ~/.wallpaper"
+  execScriptHook "wallpaper"
 
 myLayoutHook = full ||| tall ||| htall
   where
@@ -176,3 +177,10 @@ myXPConfig =
       searchPredicate = fuzzyMatch,
       sorter = fuzzySort
     }
+
+-- Fixed version of execScriptHook in XMonad.Hooks.Script to put hook scripts
+-- to `hooks` directory.
+execScriptHook :: String -> X ()
+execScriptHook hook = do
+  xmonadDir <- asks (cfgDir . directories)
+  spawn $ xmonadDir </> "hooks" </> hook
