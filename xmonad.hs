@@ -114,7 +114,7 @@ myPP =
     }
 
 myBar :: String
-myBar = "xmobar ~/.xmonad/.xmobarrc"
+myBar = "xmobar"
 
 myBgColor :: String
 myBgColor = "#16242c"
