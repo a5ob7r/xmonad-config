@@ -2,37 +2,35 @@
 
 ## Setup
 
-### Package Install
+### Install Packages
+
+xmonad
 
 ```sh
-# Install packages.
-$ cabal install xmonad xmonad-contrib
-$ cabal install xmobar --flags="all_extensions"
-$ cabal install X11 --lib
-
-# Or
-
-# Install git version.
-$ git clone https://github.com/xmonad/xmonad.git
+# Install dependencies.
 $ git clone https://github.com/xmonad/xmonad-contrib.git
+$ cd xmonad-contrib
+$ cabal install --overwrite-policy=always --lib xmonad xmonad-contrib X11
 
-$ cd /path/to/xmonad
-# Install xmonad command.
+# Install xmonad as executable for initial compilation.
+$ git clone https://github.com/xmonad/xmonad.git
+$ cd xmonad
 $ cabal install --overwrite-policy=always
+```
 
-$ cd /path/to/xmonad-contrib
-# Install xmonad libraries.
-$ cabal install xmonad xmonad-contrib --overwrite-policy=always --lib xmonad xmonad-contrib X11
+xmobar
 
-$ git clone https://github.com/jaor/xmobar.git
-$ cabal install xmobar --overwrite-policy=always --lib
+```sh
+$ cabal install xmobar --overwrite-policy=always --flags="all_extensions"
 ```
 
 ### Deploy config
 
 ```sh
 $ git clone https://github.com/a5ob7r/xmonad-config.git
-$ ln -sfv "$PWD/xmonad-config" ~/.xmonad
+$ cd xmonad-config
+$ ln -sfv "$PWD" ~/.config/xmonad
+$ ln -sfv "$PWD/xmobar" ~/.config/xmobar
 
 # Compile xmonad binary.
 $ xmonad --recompile
