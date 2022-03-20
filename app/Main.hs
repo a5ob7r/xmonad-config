@@ -1,9 +1,6 @@
 module Main where
 
-import Control.Monad (when)
-import Data.Char (chr, isAscii, toLower)
-import Data.Functor ((<&>))
-import Data.List (isInfixOf)
+import Data.Char (isAscii, toLower)
 import Data.Map.Strict (member)
 import Data.Maybe (fromMaybe)
 import Graphics.X11.ExtraTypes.XF86
@@ -136,7 +133,7 @@ myXmobarColor :: String -> String -> String
 myXmobarColor = flip xmobarColor myBgColor
 
 toggleStatusBarKey :: XConfig l -> (KeyMask, KeySym)
-toggleStatusBarKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
+toggleStatusBarKey XConfig {XMonad.modMask = mask} = (mask, xK_b)
 
 -- | 'shortenFW', is custom version of shorten which treats full width
 -- characters' width as double of ascii characters.
@@ -191,9 +188,9 @@ myXPConfig =
 -- Fixed version of execScriptHook in XMonad.Hooks.Script to put hook scripts
 -- to `hooks` directory.
 execScriptHook :: String -> X ()
-execScriptHook hook = do
+execScriptHook script = do
   xmonadDir <- asks (cfgDir . directories)
-  spawn $ xmonadDir </> "hooks" </> hook
+  spawn $ xmonadDir </> "hooks" </> script
 
 -- Whether or not current active window is floating.
 isCurrentActiveFloating :: X Bool
@@ -201,5 +198,5 @@ isCurrentActiveFloating = do
   s <- get
   let w = fmap W.focus . W.stack . W.workspace . W.current $ windowset s
   case w of
-    Just w -> pure . member w . W.floating $ windowset s
+    Just w' -> pure . member w' . W.floating $ windowset s
     Nothing -> pure False
