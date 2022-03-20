@@ -110,7 +110,8 @@ myPP =
   xmobarPP
     { ppSep = " <fc=#65727d>|</fc> ",
       ppCurrent = myXmobarColor myYellow . wrap "[" "]",
-      ppTitle = myXmobarColor myGreen . shortenFW 60
+      ppLayout = xmobarBorder "Bottom" myWhite 4,
+      ppTitle = xmobarBorder "Bottom" myGreen 4 . myXmobarColor myGreen . shortenFW 60
     }
 
 myBar :: String
@@ -118,6 +119,9 @@ myBar = "xmobar"
 
 myBgColor :: String
 myBgColor = "#16242c"
+
+myWhite :: String
+myWhite = "#fefefe"
 
 myRed :: String
 myRed = "#ec5e66"

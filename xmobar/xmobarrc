@@ -1,20 +1,20 @@
-Config { font = "xft:monospace:bold:size=24:antialias=true,xft:monospace"
+Config { font = "xft:monospace:bold:size=30:antialias=true,xft:monospace"
        , alpha = 0
        , bgColor = "#16242c"
        , fgColor = "#c0c4cd"
        , position = Bottom
        , template = " %StdinReader% }{ <fc=#65727d>|</fc> %memory% <fc=#65727d>|</fc> %cpu% <fc=#65727d>|</fc> %alsa:default:Master% <fc=#65727d>|</fc> %bright% <fc=#65727d>|</fc> %battery% <fc=#65727d>|</fc> %date% "
        , commands = [ Run StdinReader
-                    , Run Alsa "default" "Master" [ "-t", "<fc=#fac862>♪</fc> <volume>% <status>"
+                    , Run Alsa "default" "Master" [ "-t", "<box type=Bottom width=4 color=#fac862><fc=#fac862>\xf001</fc> <volume>% <status></box>"
                                                   , "--"
                                                   , "--onc", "#99c793"
                                                   , "--offc", "#ec5e66"
                                                   ]
-                    , Run Brightness [ "-t", "<fc=#fac862>☀</fc> <percent>%"
+                    , Run Brightness [ "-t", "<box type=Bottom width=4 color=#fac862><fc=#fac862>\xfbe7</fc> <percent>%</box>"
                                      , "--"
                                      , "-D", "intel_backlight"
                                      ] 3
-                    , Run Battery [ "-t", "<fc=#fac862>⚡</fc> <left>%"
+                    , Run Battery [ "-t", "<box type=Bottom width=4 color=#fac862><fc=#fac862>\xf583</fc> <left>%</box>"
                                   , "-L", "20"
                                   , "-H", "80"
                                   , "-l", "#ec5e66"
@@ -24,13 +24,13 @@ Config { font = "xft:monospace:bold:size=24:antialias=true,xft:monospace"
                                   , "-O", "<fc=#dAA520>RECH</fc>"
                                   , "-i", "<fc=#99c793>FULL</fc>"
                                   ] 10
-                    , Run Date "<fc=#fac862>D</fc> %H:%M %F(%a)" "date" 1
-                    , Run Cpu [ "--template", "<fc=#fac862>C</fc> <total>%"
+                    , Run Date "<box type=Bottom width=4 color=#fac862><fc=#fac862>\xf455</fc> %H:%M %F(%a)</box>" "date" 1
+                    , Run Cpu [ "--template", "<box type=Bottom width=4 color=#fac862><fc=#fac862>\xf85a</fc> <total>%</box>"
                               , "--low", "#99c793"
                               , "--normal", "#fac862"
                               , "--high", "#ec5e66"
                               ] 5
-                    , Run Memory [ "--template", "<fc=#fac862>M</fc> <usedratio>% (<cache>M)" ] 5
+                    , Run Memory [ "--template", "<box type=Bottom width=4 color=#fac862><fc=#fac862>\xf85a</fc> <usedratio>% (<cache>M)</box>" ] 5
                     ]
        }
 
