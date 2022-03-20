@@ -33,7 +33,7 @@ main = xmonad =<< statusBar myBar myPP toggleStatusBarKey myConfig
 myConfig =
   ewmh
     def
-      { focusedBorderColor = myRed,
+      { focusedBorderColor = red colorscheme,
         layoutHook = myLayoutHook,
         manageHook = myManageHook,
         modMask = myModMask,
@@ -105,32 +105,20 @@ myBorder =
 myPP :: PP
 myPP =
   xmobarPP
-    { ppSep = " <fc=#65727d>|</fc> ",
-      ppCurrent = myXmobarColor myYellow . wrap "[" "]",
-      ppLayout = xmobarBorder "Bottom" myWhite 4,
-      ppTitle = xmobarBorder "Bottom" myGreen 4 . myXmobarColor myGreen . shortenFW 60
+    { ppSep = " <fc=" <> brightBlack colorscheme <> ">|</fc> ",
+      ppCurrent = myXmobarColor (yellow colorscheme) . wrap "[" "]",
+      ppLayout = xmobarBorder "Bottom" (white colorscheme) 4,
+      ppTitle = xmobarBorder "Bottom" (green colorscheme) 4 . myXmobarColor (green colorscheme) . shortenFW 60
     }
 
 myBar :: String
 myBar = "xmobar"
 
-myBgColor :: String
-myBgColor = "#16242c"
-
-myWhite :: String
-myWhite = "#fefefe"
-
-myRed :: String
-myRed = "#ec5e66"
-
-myGreen :: String
-myGreen = "#99c793"
-
-myYellow :: String
-myYellow = "#fac862"
+colorscheme :: OceanicNext
+colorscheme = OceanicNext
 
 myXmobarColor :: String -> String -> String
-myXmobarColor = flip xmobarColor myBgColor
+myXmobarColor = flip xmobarColor (background colorscheme)
 
 toggleStatusBarKey :: XConfig l -> (KeyMask, KeySym)
 toggleStatusBarKey XConfig {XMonad.modMask = mask} = (mask, xK_b)
@@ -200,3 +188,89 @@ isCurrentActiveFloating = do
   case w of
     Just w' -> pure . member w' . W.floating $ windowset s
     Nothing -> pure False
+
+-- | Terminal ColorScheme
+class ColorScheme a where
+  background :: a -> String
+  foreground :: a -> String
+
+  black :: a -> String
+  red :: a -> String
+  green :: a -> String
+  yellow :: a -> String
+  blue :: a -> String
+  magenta :: a -> String
+  cyan :: a -> String
+  white :: a -> String
+
+  brightBlack :: a -> String
+  brightBlack = black
+
+  brightRed :: a -> String
+  brightRed = red
+
+  brightGreen :: a -> String
+  brightGreen = green
+
+  brightYellow :: a -> String
+  brightYellow = yellow
+
+  brightBlue :: a -> String
+  brightBlue = blue
+
+  brightMagenta :: a -> String
+  brightMagenta = magenta
+
+  brightCyan :: a -> String
+  brightCyan = cyan
+
+  brightWhite :: a -> String
+  brightWhite = white
+
+data OceanicNext = OceanicNext
+
+instance ColorScheme OceanicNext where
+  background = const "#16242c"
+  foreground = const "#c0c4cd"
+
+  black = const "#16252b"
+  red = const "#ec5e66"
+  green = const "#99c793"
+  yellow = const "#fac862"
+  blue = const "#6699cb"
+  magenta = const "#c593c4"
+  cyan = const "#5fb3b2"
+  white = const "#fefefe"
+
+  brightBlack = const "#65727d"
+  brightRed = const "#ec5e66"
+  brightGreen = const "#99c793"
+  brightYellow = const "#fac862"
+  brightBlue = const "#6699cb"
+  brightMagenta = const "#c593c4"
+  brightCyan = const "#5fb3b2"
+  brightWhite = const "#fefefe"
+
+data TomorrowNight = TomorrowNight
+
+instance ColorScheme TomorrowNight where
+  background = const "#1d1f21"
+  foreground = const "#c5c8c6"
+
+  black = const "#1d1f21"
+  red = const "#cc6666"
+  green = const "#b5bd68"
+  yellow = const "#f0c674"
+  blue = const "#81a2be"
+  magenta = const "#b294bb"
+  cyan = const "#8abeb7"
+  white = const "#c5c8c6"
+
+  brightBlack = const "#666666"
+  brightRed = const "#d54e53"
+  brightGreen = const "#b9ca4a"
+  brightYellow = const "#e7c547"
+  brightBlue = const "#7aa6da"
+  brightMagenta = const "#c397d8"
+  brightCyan = const "#70c0b1"
+  brightWhite = const "#eaeaea"
