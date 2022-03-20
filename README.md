@@ -1,40 +1,27 @@
 # My xmonad config
 
+This is my xmonad configurations using custom build script to build my xmonad executable by cabal.
+
 ## Setup
 
-### Install Packages
-
-xmonad
-
 ```sh
-# Install dependencies.
-$ git clone https://github.com/xmonad/xmonad-contrib.git
-$ cd xmonad-contrib
-$ cabal install --overwrite-policy=always --lib xmonad xmonad-contrib X11
-
-# Install xmonad as executable for initial compilation.
-$ git clone https://github.com/xmonad/xmonad.git
-$ cd xmonad
-$ cabal install --overwrite-policy=always
-```
-
-xmobar
-
-```sh
-$ cabal install xmobar --overwrite-policy=always --flags="all_extensions"
-```
-
-### Deploy config
-
-```sh
+# Clone this repository.
 $ git clone https://github.com/a5ob7r/xmonad-config.git
 $ cd xmonad-config
+
+# Deploy configs.
 $ ln -sfv "$PWD" ~/.config/xmonad
 $ ln -sfv "$PWD/xmobar" ~/.config/xmobar
 
-# Compile xmonad binary.
+# Only install the xmonad executable, not as a library, to manage xmonad.
+$ cabal install xmonad
+
+# Install xmobar.
+$ cabal install xmobar --overwrite-policy=always --flags="all_extensions"
+
+# Build and install my xmonad executable.
 $ xmonad --recompile
 
-# Append xmonad command to .xinitrc.
-$ echo exec xmonad >> ~/.xinitrc
+# Append a xmonad command to .xinitrc.
+$ echo 'exec xmonad' >> ~/.xinitrc
 ```
