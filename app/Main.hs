@@ -10,8 +10,9 @@ import XMonad
 import XMonad.Actions.CopyWindow
 import XMonad.Actions.EasyMotion (selectWindow)
 import XMonad.Actions.WindowGo
-import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.StatusBar
+import XMonad.Hooks.StatusBar.PP
 import XMonad.Layout.IfMax
 import XMonad.Layout.LayoutModifier
 import XMonad.Layout.NoBorders
@@ -28,7 +29,7 @@ import XMonad.Util.Cursor
 import XMonad.Util.EZConfig
 
 main :: IO ()
-main = xmonad =<< statusBar myBar myPP toggleStatusBarKey myConfig
+main = xmonad $ withEasySB mySB defToggleStrutsKey myConfig
 
 myConfig =
   ewmh
@@ -101,6 +102,9 @@ myBorder =
       right = 5,
       left = 5
     }
+
+mySB :: StatusBarConfig
+mySB = statusBarProp myBar $ pure myPP
 
 myPP :: PP
 myPP =
