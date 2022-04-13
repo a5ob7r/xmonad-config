@@ -131,7 +131,7 @@ toggleStatusBarKey XConfig {XMonad.modMask = mask} = (mask, xK_b)
 -- characters' width as double of ascii characters.
 shortenFW :: Int -> String -> String
 shortenFW n xs =
-  let weights = map (\x -> 1 + fromEnum (not . isAscii $ x)) xs
+  let weights = (\x -> 1 + fromEnum (not . isAscii $ x)) <$> xs
       n' = length . takeWhile (<= n) . scanl1 (+) $ weights
       suffix = if length xs > n' then "..." else ""
    in take n' xs ++ suffix
@@ -161,7 +161,7 @@ myManageHook = isPIP --> doFloat
 raiseTerminal :: X ()
 raiseTerminal = liftIO getTerminal >>= \term -> runOrRaise term (lowerClassName =? term)
   where
-    lowerClassName = fmap (map toLower) appName
+    lowerClassName = map toLower <$> appName
 
 getTerminal :: IO String
 getTerminal = fromMaybe myTerminal <$> lookupEnv "TERMINAL"
