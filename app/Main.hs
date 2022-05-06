@@ -171,6 +171,11 @@ myXPConfig :: XPConfig
 myXPConfig =
   def
     { font = "xft:monospace:size=30:antialias=ture",
+      bgColor = background OceanicNext,
+      fgColor = foreground OceanicNext,
+      bgHLight = brightBlack OceanicNext,
+      fgHLight = yellow OceanicNext,
+      borderColor = foreground OceanicNext,
       position = Top,
       height = 70,
       searchPredicate = fuzzyMatch,
