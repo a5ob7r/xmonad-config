@@ -5,6 +5,9 @@ This is my xmonad configurations using custom build script to build my xmonad ex
 ## Setup
 
 ```sh
+# Install dependencies.
+$ pacman -S git xorg-server xorg-apps xorg-xinit xorg-xmessage libx11 libxft libxinerama libxrandr libxss pkgconf
+
 # Clone this repository.
 $ git clone https://github.com/a5ob7r/xmonad-config.git
 $ cd xmonad-config
