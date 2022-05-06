@@ -26,11 +26,14 @@ Config { font = "xft:monospace:bold:size=30:antialias=true,xft:monospace"
                                   ] 10
                     , Run Date "<box type=Bottom width=4 color=#fac862><fc=#fac862>\xf455</fc> %H:%M %F(%a)</box>" "date" 1
                     , Run Cpu [ "--template", "<box type=Bottom width=4 color=#fac862><fc=#fac862>\xf85a</fc> <total>%</box>"
+                              , "--ppad", "2"
                               , "--low", "#99c793"
                               , "--normal", "#fac862"
                               , "--high", "#ec5e66"
                               ] 5
-                    , Run Memory [ "--template", "<box type=Bottom width=4 color=#fac862><fc=#fac862>\xf85a</fc> <usedratio>% (<cache>M)</box>" ] 5
+                    , Run Memory [ "--template", "<box type=Bottom width=4 color=#fac862><fc=#fac862>\xf85a</fc> <usedratio>% (<cache>M)</box>"
+                                 , "--ppad", "2"
+                                 ] 5
                     ]
        }
 
