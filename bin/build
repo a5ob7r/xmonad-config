@@ -64,7 +64,7 @@ error () {
 
 # Notificatin message.
 info () {
-  echo "$LOGPREFIX $*" >&2
+  echo "$LOGPREFIX $*"
 }
 
 # Build and deploy(install) my xmonad executable.
