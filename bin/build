@@ -83,7 +83,6 @@ install_xmonad () {
 
   # Build my xmonad executable.
   cabal install \
-    --enable-executable-static \
     --installdir="$tmpdir" \
     --install-method=copy \
     --overwrite-policy=always \
