@@ -9,6 +9,49 @@ on:
       - '**'
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        ghc: ['8.10.7']
+        cabal: ['3.6.2.0']
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: haskell/actions/setup@v2
+        id: setup-haskell
+        with:
+          ghc-version: ${{ matrix.ghc }}
+          cabal-version: ${{ matrix.cabal }}
+
+      - uses: actions/cache@v3
+        with:
+          path: ${{ steps.setup-haskell.outputs.cabal-store }}
+          key: build-${{ runner.os }}-${{ matrix.ghc }}-${{ hashFiles('cabal.project') }}
+          restore-keys: |
+            build-${{ runner.os }}-${{ matrix.ghc }}-
+
+      - name: Add path
+        run: echo ~/.cabal/bin >> "$GITHUB_PATH"
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libx11-dev libxft-dev libxinerama-dev libxrandr-dev libxss-dev
+
+      - name: Install a xmonad command
+        run: cabal install --overwrite-policy=always --jobs xmonad
+
+      - name: Deploy the xmonad config
+        run: |
+          mkdir -p ~/.config
+          ln -s "$PWD" ~/.config/xmonad
+
+      - name: Build my xmonad executable
+        run: xmonad --recompile
+
   format:
     runs-on: ubuntu-latest
 
