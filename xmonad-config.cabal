@@ -23,7 +23,8 @@ executable myxmonad
     , xmonad-contrib  ^>=0.17
 
   default-language: Haskell2010
-  ghc-options:      -W -Wall -Wcompat -fforce-recomp
+  ghc-options:
+    -W -Wall -Wcompat -fno-warn-missing-signatures -fforce-recomp
 
   if flag(pedantic)
     ghc-options: -Werror
