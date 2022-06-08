@@ -1,6 +1,8 @@
 cabal-version: 2.4
 name:          xmonad-config
 version:       0.1.0.0
+license:       BSD-3-Clause
+license-file:  LICENSE
 author:        a5ob7r
 maintainer:    12132068+a5ob7r@users.noreply.github.com
 
