@@ -119,13 +119,25 @@ if ! [[ -x $DEST ]]; then
   exit
 fi
 
-# Recompile if my xmonad executable is out-of-date.
+declare -a updated=()
+
 for src in "${SOURCES[@]}"; do
   if [[ $src -nt $DEST ]]; then
-    info "Found a updated source file($src), so recompile my xmonad executable."
-    install_xmonad "$DEST"
-    exit
+    updated+=("$src")
   fi
 done
 
-info 'No need to recompile Xmonad, so do nothing.'
+# Recompile if my xmonad executable is out-of-date.
+if (( ${#updated[@]} )); then
+  info "Found some updated source files."
+
+  for src in "${updated[@]}"; do
+    info "  - $src"
+  done
+
+  info "So recompile my xmonad executable."
+
+  install_xmonad "$DEST"
+else
+  info 'No need to recompile Xmonad, so do nothing.'
+fi
