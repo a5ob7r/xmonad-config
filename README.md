@@ -1,5 +1,8 @@
 # My xmonad config
 
+[![CI](https://github.com/a5ob7r/xmonad-config/actions/workflows/ci.yaml/badge.svg)](https://github.com/a5ob7r/xmonad-config/actions/workflows/ci.yaml)
+[![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+
 This is my xmonad configurations using custom build script to build my xmonad executable by cabal.
 
 ## Setup
