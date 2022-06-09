@@ -1,6 +1,9 @@
+{-# LANGUAGE RecordWildCards #-}
+
 module Main (main) where
 
 import Data.Char (isAscii, toLower)
+import Data.Functor
 import Data.Map.Strict (member)
 import Data.Maybe (fromMaybe)
 import Graphics.X11.ExtraTypes.XF86
@@ -29,53 +32,47 @@ import XMonad.Util.Cursor
 import XMonad.Util.EZConfig
 
 main :: IO ()
-main = xmonad $ withEasySB mySB defToggleStrutsKey myConfig
-
-myConfig =
-  ewmh
+main =
+  xmonad . withEasySB mySB defToggleStrutsKey . ewmh $
     def
       { focusedBorderColor = red colorscheme,
         layoutHook = myLayoutHook,
         manageHook = myManageHook,
-        modMask = myModMask,
+        modMask = mod4Mask,
         startupHook = myStartupHook,
-        terminal = myTerminal
+        terminal = "alacritty"
       }
-    `additionalKeys` myKeys
+      `additionalKeys'` \mask ->
+        [ ((mask, xK_r), shellPrompt myXPConfig),
+          ((mask .|. controlMask, xK_r), xmonadPrompt myXPConfig),
+          ((mask, xK_w), windowPrompt myXPConfig Goto allWindows),
+          ((noModMask, xF86XK_MonBrightnessUp), spawn "light -A 2"),
+          ((noModMask, xF86XK_MonBrightnessDown), spawn "light -U 2"),
+          ((noModMask, xF86XK_AudioLowerVolume), spawn "amixer set Master 1%-"),
+          ((noModMask, xF86XK_AudioRaiseVolume), spawn "amixer set Master 1%+"),
+          ((noModMask, xF86XK_AudioMute), spawn "amixer set Master toggle"),
+          ((noModMask, xF86XK_AudioMicMute), spawn "amixer sset Capture toggle"),
+          ((noModMask, xF86XK_Display), spawn "xrandr --auto"),
+          ((mask, xK_u), spawn "picom-trans -c +2"),
+          ((mask, xK_d), spawn "picom-trans -c -2"),
+          ((noModMask, xK_Print), spawn "xcapture root"),
+          ((mask, xK_Print), spawn "xcapture rect"),
+          ((mask .|. controlMask, xK_Print), spawn "xcapture active"),
+          ((mask, xK_a), sendMessage MirrorShrink),
+          ((mask, xK_z), sendMessage MirrorExpand),
+          ((mask, xK_Return), raiseTerminal),
+          ((mask .|. controlMask, xK_Return), raiseBrowser),
+          ((mask, xK_v), windows copyToAll),
+          ((mask, xK_x), killAllOtherCopies),
+          ((mask, xK_f), selectWindow def >>= (`whenJust` windows . W.focusWindow)),
+          ((mask, xK_j), windows W.focusDown >> whenX isCurrentActiveFloating (windows W.focusDown)),
+          ((mask, xK_k), windows W.focusUp >> whenX isCurrentActiveFloating (windows W.focusUp))
+        ]
 
-myModMask :: KeyMask
-myModMask = mod4Mask
-
-myTerminal :: String
-myTerminal = "alacritty"
-
-myKeys :: [((KeyMask, KeySym), X ())]
-myKeys =
-  [ ((myModMask, xK_r), shellPrompt myXPConfig),
-    ((myModMask .|. controlMask, xK_r), xmonadPrompt myXPConfig),
-    ((myModMask, xK_w), windowPrompt myXPConfig Goto allWindows),
-    ((noModMask, xF86XK_MonBrightnessUp), spawn "light -A 2"),
-    ((noModMask, xF86XK_MonBrightnessDown), spawn "light -U 2"),
-    ((noModMask, xF86XK_AudioLowerVolume), spawn "amixer set Master 1%-"),
-    ((noModMask, xF86XK_AudioRaiseVolume), spawn "amixer set Master 1%+"),
-    ((noModMask, xF86XK_AudioMute), spawn "amixer set Master toggle"),
-    ((noModMask, xF86XK_AudioMicMute), spawn "amixer sset Capture toggle"),
-    ((noModMask, xF86XK_Display), spawn "xrandr --auto"),
-    ((myModMask, xK_u), spawn "picom-trans -c +2"),
-    ((myModMask, xK_d), spawn "picom-trans -c -2"),
-    ((noModMask, xK_Print), spawn "xcapture root"),
-    ((myModMask, xK_Print), spawn "xcapture rect"),
-    ((myModMask .|. controlMask, xK_Print), spawn "xcapture active"),
-    ((myModMask, xK_a), sendMessage MirrorShrink),
-    ((myModMask, xK_z), sendMessage MirrorExpand),
-    ((myModMask, xK_Return), raiseTerminal),
-    ((myModMask .|. controlMask, xK_Return), raiseBrowser),
-    ((myModMask, xK_v), windows copyToAll),
-    ((myModMask, xK_x), killAllOtherCopies),
-    ((myModMask, xK_f), selectWindow def >>= (`whenJust` windows . W.focusWindow)),
-    ((myModMask, xK_j), windows W.focusDown >> whenX isCurrentActiveFloating (windows W.focusDown)),
-    ((myModMask, xK_k), windows W.focusUp >> whenX isCurrentActiveFloating (windows W.focusUp))
-  ]
+-- | A wrapper of 'additionalKeys' to get the current mod-mask key from
+-- 'XConfig'.
+additionalKeys' :: XConfig a -> (KeyMask -> [((KeyMask, KeySym), X ())]) -> XConfig a
+additionalKeys' c@XConfig {..} f = c `additionalKeys` f modMask
 
 myStartupHook :: X ()
 myStartupHook = do
@@ -104,28 +101,20 @@ myBorder =
     }
 
 mySB :: StatusBarConfig
-mySB = statusBarProp myBar $ pure myPP
-
-myPP :: PP
-myPP =
-  xmobarPP
-    { ppSep = " <fc=" <> brightBlack colorscheme <> ">|</fc> ",
-      ppCurrent = myXmobarColor (yellow colorscheme) . wrap "[" "]",
-      ppLayout = xmobarBorder "Bottom" (white colorscheme) 4,
-      ppTitle = xmobarBorder "Bottom" (green colorscheme) 4 . myXmobarColor (green colorscheme) . shortenFW 60
-    }
-
-myBar :: String
-myBar = "xmobar"
+mySB =
+  statusBarProp "xmobar" . pure $
+    xmobarPP
+      { ppSep = " <fc=" <> brightBlack colorscheme <> ">|</fc> ",
+        ppCurrent = myXmobarColor (yellow colorscheme) . wrap "[" "]",
+        ppLayout = xmobarBorder "Bottom" (white colorscheme) 4,
+        ppTitle = xmobarBorder "Bottom" (green colorscheme) 4 . myXmobarColor (green colorscheme) . shortenFW 60
+      }
 
 colorscheme :: OceanicNext
 colorscheme = OceanicNext
 
 myXmobarColor :: String -> String -> String
 myXmobarColor = flip xmobarColor (background colorscheme)
-
-toggleStatusBarKey :: XConfig l -> (KeyMask, KeySym)
-toggleStatusBarKey XConfig {XMonad.modMask = mask} = (mask, xK_b)
 
 -- | 'shortenFW', is custom version of shorten which treats full width
 -- characters' width as double of ascii characters.
@@ -159,12 +148,12 @@ myManageHook :: ManageHook
 myManageHook = isPIP --> doFloat
 
 raiseTerminal :: X ()
-raiseTerminal = liftIO getTerminal >>= \term -> runOrRaise term (lowerClassName =? term)
+raiseTerminal = do
+  XConf {config = XConfig {..}} <- ask
+
+  liftIO (lookupEnv "TERMINAL" <&> fromMaybe terminal) >>= \term -> runOrRaise term (lowerClassName =? term)
   where
     lowerClassName = map toLower <$> appName
-
-getTerminal :: IO String
-getTerminal = fromMaybe myTerminal <$> lookupEnv "TERMINAL"
 
 -- Change font config if doesn't show prompt with 'def'.
 myXPConfig :: XPConfig
