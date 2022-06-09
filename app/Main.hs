@@ -153,7 +153,8 @@ raiseTerminal :: X ()
 raiseTerminal = do
   XConf {config = XConfig {..}} <- ask
 
-  liftIO (lookupEnv "TERMINAL" <&> fromMaybe terminal) >>= \term -> runOrRaise term (lowerClassName =? term)
+  term <- liftIO (lookupEnv "TERMINAL" <&> fromMaybe terminal)
+  runOrRaise term (lowerClassName =? term)
   where
     lowerClassName = map toLower <$> appName
 
