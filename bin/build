@@ -31,10 +31,11 @@ readonly BINNAME=myxmonad
 # Files consist my xmonad executable. It is out-of-date if even one of them is
 # newer than it.
 readonly -a SOURCES=(
-  'app/Main.hs'
-  'xmonad-config.cabal'
-  'cabal.project'
-  'cabal.project.local'
+  app/Main.hs
+  src/XMonad/Config/A5ob7r/*
+  xmonad-config.cabal
+  cabal.project
+  cabal.project.local
 )
 
 ###############################################################################
