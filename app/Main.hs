@@ -127,9 +127,10 @@ shortenFW n xs =
    in take n' xs ++ suffix
 
 -- | Return whether or not a window is picture in picture(PIP) for Firefox.
--- Somehow can't detect using `WM_NAME` (is title, ) that a window is PIP on
+-- Somehow can't detect using @WM_NAME@ (is title, ) that a window is PIP on
 -- Firefox. Why?
--- ref: https://wiki.haskell.org/Xmonad/Frequently_asked_questions#I_need_to_find_the_class_title_or_some_other_X_property_of_my_program
+--
+-- ref: <https://wiki.haskell.org/Xmonad/Frequently_asked_questions#I_need_to_find_the_class_title_or_some_other_X_property_of_my_program>
 isPIPFF :: Query Bool
 isPIPFF = q1 <||> q2
   where
@@ -156,7 +157,7 @@ raiseTerminal = do
   where
     lowerClassName = map toLower <$> appName
 
--- Change font config if doesn't show prompt with 'def'.
+-- | Change font config if doesn't show prompt with 'def'.
 myXPConfig :: XPConfig
 myXPConfig =
   def
@@ -172,14 +173,14 @@ myXPConfig =
       sorter = fuzzySort
     }
 
--- Fixed version of execScriptHook in XMonad.Hooks.Script to put hook scripts
--- to `hooks` directory.
+-- | Fixed version of execScriptHook in XMonad.Hooks.Script to put hook scripts
+-- to @hooks@ directory.
 execScriptHook :: String -> X ()
 execScriptHook script = do
   xmonadDir <- asks (cfgDir . directories)
   spawn $ xmonadDir </> "hooks" </> script
 
--- Whether or not current active window is floating.
+-- | Whether or not current active window is floating.
 isCurrentActiveFloating :: X Bool
 isCurrentActiveFloating = do
   s <- get
