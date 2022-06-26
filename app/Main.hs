@@ -18,11 +18,9 @@ import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 import XMonad.Layout.IfMax
-import XMonad.Layout.LayoutModifier
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed
 import XMonad.Layout.ResizableTile
-import XMonad.Layout.Spacing
 import XMonad.Prompt
 import XMonad.Prompt.FuzzyMatch
 import XMonad.Prompt.Shell
@@ -80,26 +78,17 @@ myStartupHook = do
   setDefaultCursor xC_left_ptr
   execScriptHook "wallpaper"
 
+-- | I'm not sure, but inserting spaces around windows looks so cool. However
+-- it wastes display areas, so don't use it. Instead, we probably need
+-- bordering around the windows to indicate the window focus.
 myLayoutHook = full ||| tall ||| htall
   where
     full = renamed [Replace "Full"] $ noBorders Full
-    tall = renamed [Replace "Tall"] . IfMax 1 full . mySpacing $ ResizableTall nMaster delta ratio []
-    htall = renamed [Replace "HTall"] . IfMax 1 full . mySpacing $ ResizableTall 0 delta ratio []
+    tall = renamed [Replace "Tall"] . IfMax 1 full $ ResizableTall nMaster delta ratio []
+    htall = renamed [Replace "HTall"] . IfMax 1 full $ ResizableTall 0 delta ratio []
     nMaster = 1
     delta = 3 / 100
     ratio = 1 / 2
-
-mySpacing :: l a -> ModifiedLayout Spacing l a
-mySpacing = spacingRaw True myBorder True myBorder True
-
-myBorder :: Border
-myBorder =
-  Border
-    { top = 5,
-      bottom = 5,
-      right = 5,
-      left = 5
-    }
 
 mySB :: StatusBarConfig
 mySB =
