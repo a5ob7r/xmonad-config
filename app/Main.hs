@@ -93,7 +93,7 @@ myLayoutHook = full ||| tall ||| htall
 mySB :: StatusBarConfig
 mySB =
   statusBarProp "xmobar" $ do
-    width <- rect_width . screenRect . W.screenDetail . W.current . windowset <$> get
+    width <- gets $ rect_width . screenRect . W.screenDetail . W.current . windowset
 
     pure $
       xmobarPP
@@ -170,14 +170,14 @@ myXPConfig =
 -- to @hooks@ directory.
 execScriptHook :: String -> X ()
 execScriptHook script = do
-  xmonadDir <- asks (cfgDir . directories)
+  xmonadDir <- asks $ cfgDir . directories
   spawn $ xmonadDir </> "hooks" </> script
 
 -- | Whether or not current active window is floating.
 isCurrentActiveFloating :: X Bool
 isCurrentActiveFloating = do
-  s <- get
-  let w = fmap W.focus . W.stack . W.workspace . W.current $ windowset s
-  case w of
-    Just w' -> pure . member w' . W.floating $ windowset s
+  ws <- gets windowset
+
+  case W.peek ws of
+    Just w -> pure . member w $ W.floating ws
     Nothing -> pure False
