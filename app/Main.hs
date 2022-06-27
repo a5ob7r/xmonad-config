@@ -166,8 +166,8 @@ myXPConfig =
       sorter = fuzzySort
     }
 
--- | Fixed version of execScriptHook in XMonad.Hooks.Script to put hook scripts
--- to @hooks@ directory.
+-- | Fixed version of 'execScriptHook' in "XMonad.Hooks.Script" to put hook
+-- scripts to @hooks@ directory.
 execScriptHook :: String -> X ()
 execScriptHook script = do
   xmonadDir <- asks $ cfgDir . directories
