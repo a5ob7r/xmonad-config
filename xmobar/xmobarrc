@@ -3,7 +3,7 @@ Config { font = "xft:monospace:bold:size=30:antialias=true,xft:monospace"
        , bgColor = "#16242c"
        , fgColor = "#c0c4cd"
        , position = Bottom
-       , template = " %XMonadLog% }{ <fc=#65727d>|</fc> %memory% <fc=#65727d>|</fc> %cpu% <fc=#65727d>|</fc> %alsa:default:Master% <fc=#65727d>|</fc> %bright% <fc=#65727d>|</fc> %battery% <fc=#65727d>|</fc> %date% "
+       , template = " %XMonadLog% }{ <fc=#65727d>:</fc> %memory% <fc=#65727d>:</fc> %cpu% <fc=#65727d>:</fc> %alsa:default:Master% <fc=#65727d>:</fc> %bright% <fc=#65727d>:</fc> %battery% <fc=#65727d>:</fc> %date% "
        , commands = [ Run XMonadLog
                     , Run Alsa "default" "Master" [ "-t", "<box type=Bottom width=4 color=#fac862><fc=#fac862>\xf001</fc> <volume>% <status></box>"
                                                   , "--"

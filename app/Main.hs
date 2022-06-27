@@ -97,7 +97,7 @@ mySB =
 
     pure $
       xmobarPP
-        { ppSep = " <fc=" <> brightBlack colorscheme <> ">|</fc> ",
+        { ppSep = " <fc=" <> brightBlack colorscheme <> ">:</fc> ",
           ppCurrent = myXmobarColor (yellow colorscheme) . wrap "[" "]",
           ppLayout = xmobarBorder "Bottom" (white colorscheme) 4,
           ppTitle = xmobarBorder "Bottom" (green colorscheme) 4 . myXmobarColor (green colorscheme) . shortenFW (max 60 (fromIntegral width - 2000) `div` 30)
