@@ -97,17 +97,16 @@ mySB =
 
     pure $
       xmobarPP
-        { ppSep = " <fc=" <> brightBlack colorscheme <> ">:</fc> ",
-          ppCurrent = myXmobarColor (yellow colorscheme) . wrap "[" "]",
+        { ppSep = " " <> xmobarColor' (brightBlack colorscheme) ":" <> " ",
+          ppCurrent = xmobarColor' (yellow colorscheme) . wrap "[" "]",
           ppLayout = xmobarBorder "Bottom" (white colorscheme) 4,
-          ppTitle = xmobarBorder "Bottom" (green colorscheme) 4 . myXmobarColor (green colorscheme) . shortenFW (max 60 (fromIntegral width - 2000) `div` 30)
+          ppTitle = xmobarBorder "Bottom" (green colorscheme) 4 . xmobarColor' (green colorscheme) . shortenFW (max 60 (fromIntegral width - 2000) `div` 30)
         }
+  where
+    xmobarColor' fg = xmobarColor fg $ background colorscheme
 
 colorscheme :: OceanicNext
 colorscheme = OceanicNext
-
-myXmobarColor :: String -> String -> String
-myXmobarColor = flip xmobarColor (background colorscheme)
 
 -- | 'shortenFW', is custom version of shorten which treats full width
 -- characters' width as double of ascii characters.
