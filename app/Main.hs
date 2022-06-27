@@ -99,11 +99,12 @@ mySB =
       xmobarPP
         { ppSep = " " <> xmobarColor' (brightBlack colorscheme) ":" <> " ",
           ppCurrent = xmobarColor' (yellow colorscheme) . wrap "[" "]",
-          ppLayout = xmobarBorder "Bottom" (white colorscheme) 4,
-          ppTitle = xmobarBorder "Bottom" (green colorscheme) 4 . xmobarColor' (green colorscheme) . shortenFW (max 60 (fromIntegral width - 2000) `div` 30)
+          ppLayout = xmobarUnderline (white colorscheme) 4,
+          ppTitle = xmobarUnderline (green colorscheme) 4 . xmobarColor' (green colorscheme) . shortenFW (max 60 (fromIntegral width - 2000) `div` 30)
         }
   where
     xmobarColor' fg = xmobarColor fg $ background colorscheme
+    xmobarUnderline = xmobarBorder "Bottom"
 
 colorscheme :: OceanicNext
 colorscheme = OceanicNext
