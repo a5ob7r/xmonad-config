@@ -14,8 +14,7 @@ flag pedantic
 common common-options
   -- xmonad binaries built by GHC 9.2.* cause segfault too much.
   build-depends:    base >=4.14 && <4.16
-  ghc-options:
-    -W -Wall -Wcompat -fno-warn-missing-signatures -fforce-recomp
+  ghc-options:      -Wall -fforce-recomp
 
   if flag(pedantic)
     ghc-options: -Werror
@@ -38,3 +37,5 @@ executable myxmonad
     , xmonad          ^>=0.17
     , xmonad-config
     , xmonad-contrib  ^>=0.17
+
+  ghc-options:    -fno-warn-missing-signatures
