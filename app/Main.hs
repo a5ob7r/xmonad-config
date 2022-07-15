@@ -7,7 +7,6 @@ import Data.Map.Strict (member)
 import Data.Maybe (fromMaybe)
 import Graphics.X11.ExtraTypes.XF86
 import System.Environment (lookupEnv)
-import System.FilePath.Posix ((</>))
 import XMonad
 import XMonad.Actions.CopyWindow
 import XMonad.Actions.EasyMotion (selectWindow)
@@ -16,6 +15,7 @@ import XMonad.Config.A5ob7r.ColorScheme
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.Rescreen
+import XMonad.Hooks.Script
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 import XMonad.Layout.IfMax
@@ -30,7 +30,6 @@ import XMonad.Prompt.XMonad
 import qualified XMonad.StackSet as W
 import XMonad.Util.Cursor
 import XMonad.Util.EZConfig
-import XMonad.Util.Run
 
 main :: IO ()
 main =
@@ -84,7 +83,7 @@ myRescreenConfig :: RescreenConfig
 myRescreenConfig = RescreenConfig {..}
   where
     afterRescreenHook = execScriptHook "wallpaper"
-    randrChangeHook = execScriptHook "autorandr"
+    randrChangeHook = execScriptHook "rescreen"
 
 -- | I'm not sure, but inserting spaces around windows looks so cool. However
 -- it wastes display areas, so don't use it. Instead, we probably need
@@ -171,13 +170,6 @@ myXPConfig =
       searchPredicate = fuzzyMatch,
       sorter = fuzzySort
     }
-
--- | Fixed version of 'execScriptHook' in "XMonad.Hooks.Script" to put hook
--- scripts to @hooks@ directory.
-execScriptHook :: String -> X ()
-execScriptHook script = do
-  xmonadDir <- asks $ cfgDir . directories
-  safeSpawnProg $ xmonadDir </> "hooks" </> script
 
 -- | Whether or not current active window is floating.
 isCurrentActiveFloating :: X Bool

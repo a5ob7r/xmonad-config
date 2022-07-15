@@ -1,0 +1,71 @@
+#!/bin/bash
+#
+# Named script hook launcher for my xmonad. This is used by
+# "XMonad.Hooks.Script.execScriptHook".
+#
+
+set -eu
+
+error () {
+  echo "$*" >&2
+}
+
+has () {
+  type "$1" &>/dev/null
+}
+
+wallpaper () {
+  if has feh && [[ -r ~/.wallpaper ]]; then
+    feh --no-fehbg --bg-scale ~/.wallpaper
+  fi
+}
+
+rescreen () {
+  if has autorandr; then
+    autorandr --change
+  fi
+}
+
+case "$1" in
+  -h | --help )
+    echo -n "\
+Descriptions:
+  Run a hook for my xmonad.
+
+  Current hooks:
+
+  - rescreen
+
+    Rescreen using autorandr.
+
+    Even if configures the same xrandr on a laptop PC, saved profile by
+    autorandr is differ in according to whether or not lid is opened. So we
+    should save both profiles to ignore it.
+
+  - wallpaper
+
+    Set a wallpaper using feh.
+
+    This hook looks up ~/.wallpaper as a wallpaper.
+
+Usages:
+  hooks <hook_name>
+
+Options:
+  -h, --help    Show this message and exit.
+"
+    exit 0
+    ;;
+  rescreen )
+    rescreen
+    exit
+    ;;
+  wallpaper )
+    wallpaper
+    exit
+    ;;
+  * )
+    error "An unknown hook name: $1"
+    exit 1
+    ;;
+esac
