@@ -3,7 +3,6 @@
 module Main (main) where
 
 import Data.Char (isAscii, toLower)
-import Data.Functor
 import Data.Map.Strict (member)
 import Data.Maybe (fromMaybe)
 import Graphics.X11.ExtraTypes.XF86
@@ -122,14 +121,32 @@ shortenFW n xs =
 myManageHook :: ManageHook
 myManageHook = isInProperty "_NET_WM_STATE" "_NET_WM_STATE_ABOVE" --> doFloat
 
+-- | A terminal version of 'raiseBrowser' or 'raiseEditor' in
+-- "XMonad.Actions.WindowGo" with extra.
+--
+-- Like above two function, the terminal appcaliation's name is
+-- case-insensitive.
+--
+-- Unlike above two function, this queries not only 'className', but also
+-- 'appName' using the terminal appcaliation's name.
+--
+-- * 'className' is the first element in @WM_CLASS(STRING)@.
+-- * 'appName' is the second element in @WM_CLASS(STRING)@.
+-- <https://wiki.haskell.org/Xmonad/Frequently_asked_questions>
+--
+-- The terminal's application name is determined in the following order.
+--
+-- 1. Looks up @$TERMINAL@.
+-- 2. Fallbacks to your 'XConfig''s 'terminal'.
 raiseTerminal :: X ()
 raiseTerminal = do
   XConf {config = XConfig {..}} <- ask
 
-  term <- liftIO (lookupEnv "TERMINAL" <&> fromMaybe terminal)
-  runOrRaise term (lowerClassName =? term)
+  term <- liftIO $ fromMaybe terminal <$> lookupEnv "TERMINAL"
+  runOrRaise term (className' =? term <||> appName' =? term)
   where
-    lowerClassName = map toLower <$> appName
+    className' = map toLower <$> className
+    appName' = map toLower <$> appName
 
 -- | Change font config if doesn't show prompt with 'def'.
 myXPConfig :: XPConfig
