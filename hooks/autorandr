@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# Rearrange screen by autorandr.
+#
+# Even if configures the same xrandr on a laptop PC, saved profile by autorandr
+# is differ in according to whether or not lid is opened. So we should save
+# both profiles to ignore it.
+#
+
+has () {
+  type "$1" &>/dev/null
+}
+
+if has autorandr; then
+  autorandr --change
+fi

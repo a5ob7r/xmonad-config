@@ -15,6 +15,7 @@ import XMonad.Actions.WindowGo
 import XMonad.Config.A5ob7r.ColorScheme
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.Rescreen
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 import XMonad.Layout.IfMax
@@ -29,10 +30,11 @@ import XMonad.Prompt.XMonad
 import qualified XMonad.StackSet as W
 import XMonad.Util.Cursor
 import XMonad.Util.EZConfig
+import XMonad.Util.Run
 
 main :: IO ()
 main =
-  xmonad . withEasySB mySB defToggleStrutsKey . ewmh $
+  xmonad . withEasySB mySB defToggleStrutsKey . ewmh . rescreenHook myRescreenConfig $
     def
       { focusedBorderColor = red colorscheme,
         layoutHook = myLayoutHook,
@@ -77,6 +79,12 @@ myStartupHook :: X ()
 myStartupHook = do
   setDefaultCursor xC_left_ptr
   execScriptHook "wallpaper"
+
+myRescreenConfig :: RescreenConfig
+myRescreenConfig = RescreenConfig {..}
+  where
+    afterRescreenHook = execScriptHook "wallpaper"
+    randrChangeHook = execScriptHook "autorandr"
 
 -- | I'm not sure, but inserting spaces around windows looks so cool. However
 -- it wastes display areas, so don't use it. Instead, we probably need
@@ -169,7 +177,7 @@ myXPConfig =
 execScriptHook :: String -> X ()
 execScriptHook script = do
   xmonadDir <- asks $ cfgDir . directories
-  spawn $ xmonadDir </> "hooks" </> script
+  safeSpawnProg $ xmonadDir </> "hooks" </> script
 
 -- | Whether or not current active window is floating.
 isCurrentActiveFloating :: X Bool
