@@ -15,6 +15,7 @@ import XMonad.Actions.EasyMotion (selectWindow)
 import XMonad.Actions.WindowGo
 import XMonad.Config.A5ob7r.ColorScheme
 import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 import XMonad.Layout.IfMax
@@ -118,28 +119,8 @@ shortenFW n xs =
       suffix = if length xs > n' then "..." else ""
    in take n' xs ++ suffix
 
--- | Return whether or not a window is picture in picture(PIP) for Firefox.
--- Somehow can't detect using @WM_NAME@ (is title, ) that a window is PIP on
--- Firefox. Why?
---
--- ref: <https://wiki.haskell.org/Xmonad/Frequently_asked_questions#I_need_to_find_the_class_title_or_some_other_X_property_of_my_program>
-isPIPFF :: Query Bool
-isPIPFF = q1 <||> q2
-  where
-    -- Since Firefox Developer Edition Ver. 90.0*.
-    q1 = title =? "Picture-in-Picture"
-    q2 = stringProperty "WM_WINDOW_ROLE" =? "PictureInPicture"
-
--- | Return whether or not a window is picture in picture(PIP) for Chrome.
-isPIPChrome :: Query Bool
-isPIPChrome = title =? "Picture in picture"
-
--- | Return whether or not a window is picture in picture(PIP).
-isPIP :: Query Bool
-isPIP = isPIPFF <||> isPIPChrome
-
 myManageHook :: ManageHook
-myManageHook = isPIP --> doFloat
+myManageHook = isInProperty "_NET_WM_STATE" "_NET_WM_STATE_ABOVE" --> doFloat
 
 raiseTerminal :: X ()
 raiseTerminal = do
