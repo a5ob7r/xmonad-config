@@ -137,7 +137,7 @@ myManageHook = isInProperty "_NET_WM_STATE" "_NET_WM_STATE_ABOVE" --> doFloat
 -- The terminal's application name is determined in the following order.
 --
 -- 1. Looks up @$TERMINAL@.
--- 2. Fallbacks to your 'XConfig''s 'terminal'.
+-- 2. Fallbacks to your 'terminal' in 'XConfig'.
 raiseTerminal :: X ()
 raiseTerminal = do
   XConf {config = XConfig {..}} <- ask
