@@ -116,7 +116,7 @@ shortenFW n xs =
   let weights = (\x -> 1 + fromEnum (not . isAscii $ x)) <$> xs
       n' = length . takeWhile (<= n) . scanl1 (+) $ weights
       suffix = if length xs > n' then "..." else ""
-   in take n' xs ++ suffix
+   in take n' xs <> suffix
 
 myManageHook :: ManageHook
 myManageHook = isInProperty "_NET_WM_STATE" "_NET_WM_STATE_ABOVE" --> doFloat
