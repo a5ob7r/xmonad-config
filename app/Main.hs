@@ -3,6 +3,7 @@
 module Main (main) where
 
 import Data.Char (isAscii, toLower)
+import Data.List (scanl')
 import Data.Map.Strict (member)
 import Data.Maybe (fromMaybe)
 import Graphics.X11.ExtraTypes.XF86
@@ -116,14 +117,32 @@ mySB =
 colorscheme :: OceanicNext
 colorscheme = OceanicNext
 
--- | 'shortenFW', is custom version of shorten which treats full width
--- characters' width as double of ascii characters.
+-- | Custom version of 'XMonad.Hooks.StatusBar.PP.shorten'. This treats full
+-- width characters' width as double of ascii characters.
+--
+-- > shortenFW 3 "foo"
+-- "foo"
+--
+-- > shortenFW 3 "foobar"
+-- "..."
+--
+-- > shortenFW 3 "あいう"
+-- "..."
+--
+-- > shortenFW 5 "あいう"
+-- "\12354..."
+--
+-- > shortenFW 6 "あいう"
+-- "\12354\12356\12358"
 shortenFW :: Int -> String -> String
-shortenFW n xs =
-  let weights = (\x -> 1 + fromEnum (not . isAscii $ x)) <$> xs
-      n' = length . takeWhile (<= n) . scanl1 (+) $ weights
-      suffix = if length xs > n' then "..." else ""
-   in take n' xs <> suffix
+shortenFW n s =
+  if length s == l
+    then s
+    else take l' s <> "..."
+  where
+    weights = (\c -> 1 + fromEnum (not . isAscii $ c)) <$> s
+    l = length . takeWhile (<= n) . scanl1 (+) $ weights
+    l' = length . tail . takeWhile (<= n) . scanl' (+) 3 $ weights
 
 myManageHook :: ManageHook
 myManageHook = isInProperty "_NET_WM_STATE" "_NET_WM_STATE_ABOVE" --> doFloat
