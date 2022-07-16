@@ -23,6 +23,7 @@ import XMonad.Layout.IfMax
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed
 import XMonad.Layout.ResizableTile
+import XMonad.Layout.TrackFloating
 import XMonad.Prompt
 import XMonad.Prompt.FuzzyMatch
 import XMonad.Prompt.Shell
@@ -91,7 +92,7 @@ myRescreenConfig = RescreenConfig {..}
 -- bordering around the windows to indicate the window focus.
 myLayoutHook = full ||| tall ||| htall
   where
-    full = renamed [Replace "Full"] $ noBorders Full
+    full = renamed [Replace "Full"] . trackFloating $ noBorders Full
     tall = renamed [Replace "Tall"] . IfMax 1 full $ ResizableTall nMaster delta ratio []
     htall = renamed [Replace "HTall"] . IfMax 1 full $ ResizableTall 0 delta ratio []
     nMaster = 1
