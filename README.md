@@ -8,8 +8,11 @@ This is my xmonad configurations using custom build script to build my xmonad ex
 ## Setup
 
 ```sh
-# Install dependencies.
-$ pacman -S git xorg-server xorg-apps xorg-xinit xorg-xmessage libx11 libxft libxinerama libxrandr libxss pkgconf
+# Install dependencies to build xmoand.
+$ pacman -S xorg-server xorg-apps xorg-xinit xorg-xmessage libx11 libxft libxinerama libxrandr libxss pkgconf
+
+# Install dependencies for others.
+$ pacman -S git feh picom light alsa-utils autorandr imagemagick
 
 # Clone this repository.
 $ git clone https://github.com/a5ob7r/xmonad-config.git
