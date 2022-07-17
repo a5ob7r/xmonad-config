@@ -191,7 +191,7 @@ myXPConfig =
       sorter = fuzzySort
     }
 
--- | Whether or not current active window is floating.
+-- | Whether or not the current active window is floating.
 isCurrentActiveFloating :: X Bool
 isCurrentActiveFloating = do
   ws <- gets windowset
