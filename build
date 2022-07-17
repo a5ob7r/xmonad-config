@@ -70,27 +70,33 @@ info () {
 
 # Build and deploy(install) my xmonad executable.
 install_xmonad () {
-  local dest="$1"
-  local -r dest
+  local -r dest=$1
+  local -r dest_dir=${dest%/*}
 
-  local tmpdir
-  tmpdir="$(mktemp -d)"
-  local -r tmpdir
+  if ! [[ -d $dest_dir ]]; then
+    error "$dest_dir isn't a directory."
+    return 1
+  fi
 
-  # Expand a variable just now because it is local variable and maybe the trap
-  # can't find it when the trap happens.
-  # shellcheck disable=SC2064
-  trap "rm -v -r '$tmpdir'" EXIT
-
-  # Build my xmonad executable.
   cabal install \
-    --installdir="$tmpdir" \
+    --installdir="$dest_dir" \
     --install-method=copy \
     --overwrite-policy=always \
     ;
 
-  # Deploy my xmonad executable.
-  install -v -D -T "$tmpdir/$BINNAME" "$dest"
+  if [[ -e $dest ]]; then
+    if [[ -h $dest ]]; then
+      if [[ $dest -ef $dest_dir/$BINNAME ]]; then
+        info "$dest is linked to $dest_dir/$BINNAME, so no need to do anything."
+      else
+        info "$dest isn't linked to $dest_dir/$BINNAME. Please unlink it."
+      fi
+    else
+      info "$dest isn't a symlink. Please remove it."
+    fi
+  else
+    ln -sv "$BINNAME" "$dest"
+  fi
 }
 
 ###############################################################################
@@ -104,7 +110,7 @@ case $# in
     exit 1
     ;;
   1 )
-    DEST="$1"
+    DEST=$1
     readonly DEST
     ;;
   * )
