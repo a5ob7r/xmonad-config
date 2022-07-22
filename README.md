@@ -23,10 +23,10 @@ $ ln -sfv "$PWD" ~/.config/xmonad
 $ ln -sfv "$PWD/xmobar" ~/.config/xmobar
 
 # Only install the xmonad executable, not as a library, to manage xmonad.
-$ cabal install xmonad
+$ cabal install --overwrite-policy=always xmonad
 
 # Install xmobar.
-$ cabal install xmobar --overwrite-policy=always --flags="all_extensions"
+$ cabal install --overwrite-policy=always --flags=all_extensions xmobar
 
 # Build and install my xmonad executable.
 $ xmonad --recompile
