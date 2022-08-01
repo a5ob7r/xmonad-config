@@ -12,8 +12,10 @@ flag pedantic
   manual:      True
 
 common common-options
-  -- xmonad binaries built by GHC 9.2.* cause segfault too much.
-  build-depends:    base >=4.14 && <4.16
+  -- GHC 9.2.* until 9.2.3 have a bug related to 'keepAlive#' primitive, and
+  -- this frequently causes a xmonad binary's crash by segfault.
+  -- <https://gitlab.haskell.org/ghc/ghc/-/issues/21708#note_440043>
+  build-depends:    base >=4.14 && <4.16 || >=4.16.3
   ghc-options:      -Wall -fforce-recomp
 
   if flag(pedantic)
