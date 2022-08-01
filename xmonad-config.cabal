@@ -16,7 +16,8 @@ common common-options
   -- this frequently causes a xmonad binary's crash by segfault.
   -- <https://gitlab.haskell.org/ghc/ghc/-/issues/21708#note_440043>
   build-depends:    base >=4.14 && <4.16 || >=4.16.3
-  ghc-options:      -Wall -fforce-recomp
+  ghc-options:
+    -Wall -Wredundant-constraints -Wpartial-fields -Wunused-packages
 
   if flag(pedantic)
     ghc-options: -Werror
@@ -39,4 +40,4 @@ executable myxmonad
     , xmonad-config
     , xmonad-contrib  ^>=0.17
 
-  ghc-options:    -fno-warn-missing-signatures
+  ghc-options:    -Wno-missing-signatures
