@@ -3,9 +3,9 @@
 module Main (main) where
 
 import Data.Char (isAscii, toLower)
-import Data.List (scanl')
+import Data.List (intersperse, scanl')
 import Data.Map.Strict (member)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, isJust)
 import Graphics.X11.ExtraTypes.XF86
 import System.Environment (lookupEnv)
 import XMonad
@@ -102,14 +102,32 @@ myLayoutHook = full ||| tall ||| htall
 mySB :: StatusBarConfig
 mySB =
   statusBarProp "xmobar" $ do
-    width <- gets $ rect_width . screenRect . W.screenDetail . W.current . windowset
+    wset <- gets windowset
+
+    let width = rect_width . screenRect . W.screenDetail . W.current $ wset
+        curWS = W.workspace . W.current $ wset
+
+        nCharWS =
+          sum . intersperse 1 $
+            [2 + length (W.tag curWS)]
+              <> [2 + length (W.tag . W.workspace $ sc) | sc <- W.visible wset]
+              <> [length (W.tag ws) | ws <- W.hidden wset, isJust (W.stack ws)]
+        nCharLayout = length . description $ W.layout curWS
+        nCharLeft = 1 + nCharWS + 3 + nCharLayout + 3
+        nCharRight = 82
+
+        -- A monospace glyph width on xmobar. This value is determined by our
+        -- config and environment.
+        glyphWidth = 21
+
+        nChar = max (glyphWidth * 5) (fromIntegral width - ((nCharLeft + nCharRight) * glyphWidth)) `div` glyphWidth
 
     pure $
       xmobarPP
         { ppSep = wrap " " " " $ xmobarColor' (brightBlack colorscheme) ":",
           ppCurrent = xmobarColor' (yellow colorscheme) . wrap "[" "]",
           ppLayout = xmobarUnderline (white colorscheme) 4,
-          ppTitle = xmobarUnderline (green colorscheme) 4 . xmobarColor' (green colorscheme) . shortenFW (max 60 (fromIntegral width - 2000) `div` 30)
+          ppTitle = xmobarUnderline (green colorscheme) 4 . xmobarColor' (green colorscheme) . shortenFW nChar
         }
   where
     xmobarColor' fg = xmobarColor fg $ background colorscheme
