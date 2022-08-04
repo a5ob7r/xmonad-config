@@ -90,12 +90,23 @@ myRescreenConfig = RescreenConfig {..}
 -- | I'm not sure, but inserting spaces around windows looks so cool. However
 -- it wastes display areas, so don't use it. Instead, we probably need
 -- bordering around the windows to indicate the window focus.
-myLayoutHook = full ||| tall ||| htall
+myLayoutHook = full ||| tall
   where
     full = renamed [Replace "Full"] . trackFloating $ noBorders Full
+
+    -- The Tall layout which has no master area means just equal size multiple
+    -- rows and just a single column. If you want to use two column layout,
+    -- increase the number of master windows using 'IncMasterN' as below.
+    --
+    -- > sendMessage (IncMasterN 1)
+    --
+    -- Or, decrease it to restore a single column layout as below.
+    --
+    -- > sendMessage (IncMasterN (-1))
+    --
+    -- By default, Xmonad binds these actions to @Mod+,@ and @Mod-.@.
     tall = renamed [Replace "Tall"] . IfMax 1 full $ ResizableTall nMaster delta ratio []
-    htall = renamed [Replace "HTall"] . IfMax 1 full $ ResizableTall 0 delta ratio []
-    nMaster = 1
+    nMaster = 0
     delta = 3 / 100
     ratio = 1 / 2
 
