@@ -131,7 +131,7 @@ mySB =
         -- config and environment.
         glyphWidth = 21
 
-        nChar = max (glyphWidth * 5) (fromIntegral width - ((nCharLeft + nCharRight) * glyphWidth)) `div` glyphWidth
+        nChar = max (glyphWidth * 5) (fromIntegral width - (nCharLeft + nCharRight) * glyphWidth) `div` glyphWidth
 
     pure $
       xmobarPP
