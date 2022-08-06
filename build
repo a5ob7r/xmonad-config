@@ -31,8 +31,8 @@ readonly BINNAME=myxmonad
 # Files consist my xmonad executable. It is out-of-date if even one of them is
 # newer than it.
 readonly -a SOURCES=(
-  app/Main.hs
-  src/XMonad/Config/A5ob7r/*
+  app
+  src
   xmonad-config.cabal
   cabal.project
   cabal.project.local
@@ -128,7 +128,22 @@ fi
 
 declare -a updated=()
 
-for src in "${SOURCES[@]}"; do
+# NOTE: "read" with "-d DELIM" returns non-zero if the DELIM isn't in the
+# input. If the DELIM is an empty string, it means that DELIM is a NUL
+# character (\0). However any NUL character in command substitutions is ignored
+# by bash, so "read -d ''" with an input which is created by a command
+# substitution always returns non-zero as a status code.
+read -r -d '' -a srcs <<<"$(
+  for src in "${SOURCES[@]}"; do
+    if [[ -d $src ]]; then
+      find "$src" -type f -name '*.hs' -o -name '*.lhs' -o -name '*.hsc'
+    else
+      echo "$src"
+    fi
+  done
+)" || true
+
+for src in "${srcs[@]}"; do
   if [[ $src -nt $DEST ]]; then
     updated+=("$src")
   fi
