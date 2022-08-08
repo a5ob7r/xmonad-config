@@ -186,8 +186,8 @@ myManageHook = isInProperty "_NET_WM_STATE" "_NET_WM_STATE_ABOVE" --> doFloat
 -- Unlike above two function, this queries not only 'className', but also
 -- 'appName' using the terminal appcaliation's name.
 --
--- * 'className' is the first element in @WM_CLASS(STRING)@.
--- * 'appName' is the second element in @WM_CLASS(STRING)@.
+-- * 'appName' is the first element in @WM_CLASS(STRING)@.
+-- * 'className' is the second element in @WM_CLASS(STRING)@.
 -- <https://wiki.haskell.org/Xmonad/Frequently_asked_questions>
 --
 -- The terminal's application name is determined in the following order.
