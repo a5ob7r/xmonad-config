@@ -1,3 +1,4 @@
+{-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
@@ -85,7 +86,7 @@ main = do
 -- | A wrapper of 'additionalKeys' to get the current mod-mask key from
 -- 'XConfig'.
 additionalKeys' :: XConfig a -> (KeyMask -> [((KeyMask, KeySym), X ())]) -> XConfig a
-additionalKeys' c@XConfig {..} f = c `additionalKeys` f modMask
+additionalKeys' c@XConfig {modMask} f = c `additionalKeys` f modMask
 
 myStartupHook :: X ()
 myStartupHook = do
