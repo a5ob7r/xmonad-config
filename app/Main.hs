@@ -111,35 +111,31 @@ myLayoutHook = full ||| tall
     ratio = 1 / 2
 
 mySB :: StatusBarConfig
-mySB =
-  statusBarProp "xmobar" $ do
-    wset <- gets windowset
+mySB = statusBarProp "xmobar" . withWindowSet $ \wset ->
+  let width = rect_width . screenRect . W.screenDetail . W.current $ wset
+      curWS = W.workspace . W.current $ wset
 
-    let width = rect_width . screenRect . W.screenDetail . W.current $ wset
-        curWS = W.workspace . W.current $ wset
+      nCharWS =
+        sum . intersperse 1 $
+          [2 + length (W.tag curWS)]
+            <> [2 + length (W.tag . W.workspace $ sc) | sc <- W.visible wset]
+            <> [length (W.tag hws) | hws <- W.hidden wset, isJust (W.stack hws)]
+      nCharLayout = length . description $ W.layout curWS
+      nCharLeft = 1 + nCharWS + 3 + nCharLayout + 3
+      nCharRight = 82
 
-        nCharWS =
-          sum . intersperse 1 $
-            [2 + length (W.tag curWS)]
-              <> [2 + length (W.tag . W.workspace $ sc) | sc <- W.visible wset]
-              <> [length (W.tag ws) | ws <- W.hidden wset, isJust (W.stack ws)]
-        nCharLayout = length . description $ W.layout curWS
-        nCharLeft = 1 + nCharWS + 3 + nCharLayout + 3
-        nCharRight = 82
+      -- A monospace glyph width on xmobar. This value is determined by our
+      -- config and environment.
+      glyphWidth = 21
 
-        -- A monospace glyph width on xmobar. This value is determined by our
-        -- config and environment.
-        glyphWidth = 21
-
-        nChar = max (glyphWidth * 5) (fromIntegral width - (nCharLeft + nCharRight) * glyphWidth) `div` glyphWidth
-
-    pure $
-      xmobarPP
-        { ppSep = wrap " " " " $ xmobarColor' (brightBlack colorscheme) ":",
-          ppCurrent = xmobarColor' (yellow colorscheme) . wrap "[" "]",
-          ppLayout = xmobarUnderline (white colorscheme) 4,
-          ppTitle = xmobarUnderline (green colorscheme) 4 . xmobarColor' (green colorscheme) . shortenFW nChar
-        }
+      nChar = max (glyphWidth * 5) (fromIntegral width - (nCharLeft + nCharRight) * glyphWidth) `div` glyphWidth
+   in return $
+        xmobarPP
+          { ppSep = wrap " " " " $ xmobarColor' (brightBlack colorscheme) ":",
+            ppCurrent = xmobarColor' (yellow colorscheme) . wrap "[" "]",
+            ppLayout = xmobarUnderline (white colorscheme) 4,
+            ppTitle = xmobarUnderline (green colorscheme) 4 . xmobarColor' (green colorscheme) . shortenFW nChar
+          }
   where
     xmobarColor' fg = xmobarColor fg $ background colorscheme
     xmobarUnderline = xmobarBorder "Bottom"
