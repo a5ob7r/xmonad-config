@@ -18,6 +18,7 @@ common common-options
   build-depends:    base >=4.14 && <4.16 || >=4.16.3
   ghc-options:
     -Wall -Wredundant-constraints -Wpartial-fields -Wunused-packages
+    -Widentities
 
   if flag(pedantic)
     ghc-options: -Werror
