@@ -194,7 +194,7 @@ raiseTerminal :: X ()
 raiseTerminal = do
   XConf {config = XConfig {..}} <- ask
 
-  term <- liftIO $ fromMaybe terminal <$> lookupEnv "TERMINAL"
+  term <- io $ fromMaybe terminal <$> lookupEnv "TERMINAL"
   runOrRaise term (className' =? term <||> appName' =? term)
   where
     className' = map toLower <$> className
