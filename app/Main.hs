@@ -222,9 +222,4 @@ myXPConfig =
 
 -- | Whether or not the current active window is floating.
 isCurrentActiveFloating :: X Bool
-isCurrentActiveFloating = do
-  ws <- gets windowset
-
-  case W.peek ws of
-    Just w -> pure . member w $ W.floating ws
-    Nothing -> pure False
+isCurrentActiveFloating = withWindowSet $ \wset -> return . maybe False (`member` W.floating wset) $ W.peek wset
