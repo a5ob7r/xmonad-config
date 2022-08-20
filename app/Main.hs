@@ -1,13 +1,19 @@
 {-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Main (main) where
 
+import Control.Exception (IOException, catch)
+import Control.Monad.Extra (findM)
 import Data.Char (isAscii, toLower)
 import Data.List (intersperse, scanl')
+import Data.List.Extra (headDef, split)
 import Data.Map.Strict (member)
-import Data.Maybe (fromMaybe, isJust)
+import Data.Maybe (catMaybes, fromMaybe, isJust)
 import Graphics.X11.ExtraTypes.XF86
 import System.Environment (lookupEnv)
+import System.FilePath ((</>))
+import System.Posix.Files (fileAccess)
 import XMonad
 import XMonad.Actions.CopyWindow
 import XMonad.Actions.EasyMotion (selectWindow)
@@ -26,7 +32,7 @@ import XMonad.Layout.ResizableTile
 import XMonad.Layout.TrackFloating
 import XMonad.Prompt
 import XMonad.Prompt.FuzzyMatch
-import XMonad.Prompt.Shell
+import XMonad.Prompt.Shell hiding (split)
 import XMonad.Prompt.Window
 import XMonad.Prompt.XMonad
 import qualified XMonad.StackSet as W
@@ -34,7 +40,12 @@ import XMonad.Util.Cursor
 import XMonad.Util.EZConfig
 
 main :: IO ()
-main =
+main = do
+  myTerminal <-
+    fmap (headDef "xterm" . catMaybes) . sequence $
+      (lookupEnv <$> ["XMONAD_TERMINAL", "TERMINAL"])
+        <> ((\term -> fmap (const term) <$> which term) <$> ["st-256color", "st", "alacritty", "urxvt"])
+
   xmonad . withEasySB mySB defToggleStrutsKey . ewmh . rescreenHook myRescreenConfig $
     def
       { focusedBorderColor = red colorscheme,
@@ -42,7 +53,7 @@ main =
         manageHook = myManageHook,
         modMask = mod4Mask,
         startupHook = myStartupHook,
-        terminal = "alacritty"
+        terminal = myTerminal
       }
       `additionalKeys'` \mask ->
         [ ((mask, xK_r), shellPrompt myXPConfig),
@@ -185,16 +196,9 @@ myManageHook = isInProperty "_NET_WM_STATE" "_NET_WM_STATE_ABOVE" --> doFloat
 -- * 'appName' is the first element in @WM_CLASS(STRING)@.
 -- * 'className' is the second element in @WM_CLASS(STRING)@.
 -- <https://wiki.haskell.org/Xmonad/Frequently_asked_questions>
---
--- The terminal's application name is determined in the following order.
---
--- 1. Looks up @$TERMINAL@.
--- 2. Fallbacks to your 'terminal' in 'XConfig'.
 raiseTerminal :: X ()
 raiseTerminal = do
-  XConf {config = XConfig {..}} <- ask
-
-  term <- io $ fromMaybe terminal <$> lookupEnv "TERMINAL"
+  term <- asks $ terminal . config
   runOrRaise term (className' =? term <||> appName' =? term)
   where
     className' = map toLower <$> className
@@ -219,3 +223,9 @@ myXPConfig =
 -- | Whether or not the current active window is floating.
 isCurrentActiveFloating :: X Bool
 isCurrentActiveFloating = withWindowSet $ \wset -> return . maybe False (`member` W.floating wset) $ W.peek wset
+
+-- | A naive haskell implementation of @which@, which is a UNIX command to get the full-path of a executable.
+which :: MonadIO m => FilePath -> m (Maybe FilePath)
+which epath = liftIO (lookupEnv "PATH") >>= findM isExecutable . map (</> epath) . split (== ':') . fromMaybe ""
+  where
+    isExecutable path = liftIO $ fileAccess path False False True `catch` \(_ :: IOException) -> return False
