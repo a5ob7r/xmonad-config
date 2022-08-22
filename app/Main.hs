@@ -1,3 +1,4 @@
+{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ScopedTypeVariables #-}
@@ -5,11 +6,12 @@
 module Main (main) where
 
 import Control.Exception (IOException, catch)
-import Control.Monad.Extra (findM)
+import Control.Monad ((>=>))
+import Control.Monad.Extra (allM, findM)
 import Data.Char (isAscii, toLower)
+import Data.Function (fix)
 import Data.List (intersperse, scanl')
 import Data.List.Extra (headDef, split)
-import Data.Map.Strict (member)
 import Data.Maybe (catMaybes, fromMaybe, isJust)
 import Graphics.X11.ExtraTypes.XF86
 import System.Environment (lookupEnv)
@@ -22,6 +24,7 @@ import XMonad.Actions.WindowGo
 import XMonad.Config.A5ob7r.ColorScheme
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.RefocusLast (isFloat)
 import XMonad.Hooks.Rescreen
 import XMonad.Hooks.Script
 import XMonad.Hooks.StatusBar
@@ -79,8 +82,8 @@ main = do
           ((mask, xK_v), windows copyToAll),
           ((mask, xK_x), killAllOtherCopies),
           ((mask, xK_f), selectWindow def >>= (`whenJust` windows . W.focusWindow)),
-          ((mask, xK_j), windows W.focusDown >> whenX isCurrentActiveFloating (windows W.focusDown)),
-          ((mask, xK_k), windows W.focusUp >> whenX isCurrentActiveFloating (windows W.focusUp))
+          ((mask, xK_j), focusSkipFloat W.focusDown),
+          ((mask, xK_k), focusSkipFloat W.focusUp)
         ]
 
 -- | A wrapper of 'additionalKeys' to get the current mod-mask key from
@@ -221,9 +224,24 @@ myXPConfig =
       sorter = fuzzySort
     }
 
--- | Whether or not the current active window is floating.
-isCurrentActiveFloating :: X Bool
-isCurrentActiveFloating = withWindowSet $ \wset -> return . maybe False (`member` W.floating wset) $ W.peek wset
+-- | A wrapper of 'windows' to skip floating windows when switch the window
+-- focus. If all of windows on the workspace is floating, this function runs
+-- @f@ just once. Otherwise this function runs @f@ until fucuses a non-floating
+-- window.
+--
+-- FIXME: This function assumes that @f@ is only 'W.focusDown' or 'W.focusUp'.
+-- This means that @f@ must rotate the window focus. If @f@ doesn't it, this
+-- function probably causes an infinite loop.
+focusSkipFloat :: (WindowSet -> WindowSet) -> X ()
+focusSkipFloat f =
+  withWindowSet $
+    allM (runQuery isFloat) . W.index >=> \case
+      True -> windows f
+      False -> windows f >> fix (\more -> whenX isFocusFloat $ windows f >> more)
+
+-- | Whether or not the focused window on the current workspace is floating.
+isFocusFloat :: X Bool
+isFocusFloat = withWindowSet $ maybe (return False) (runQuery isFloat) . W.peek
 
 -- | A naive haskell implementation of @which@, which is a UNIX command to get the full-path of a executable.
 which :: MonadIO m => FilePath -> m (Maybe FilePath)

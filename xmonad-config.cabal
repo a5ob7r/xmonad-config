@@ -35,7 +35,6 @@ executable myxmonad
   main-is:        Main.hs
   hs-source-dirs: app
   build-depends:
-    , containers      ^>=0.6.5
     , extra           ^>=1.7.10
     , filepath        ^>=1.4.100.0
     , unix            ^>=2.7.3
