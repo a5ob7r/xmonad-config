@@ -10,10 +10,11 @@ import Control.Monad ((>=>))
 import Control.Monad.Extra (allM, findM)
 import Data.Char (isAscii, toLower)
 import Data.Function (fix)
-import Data.List (intersperse, scanl')
+import Data.List (find, intersperse, scanl')
 import Data.List.Extra (headDef, split)
 import Data.Maybe (catMaybes, fromMaybe, isJust)
 import Graphics.X11.ExtraTypes.XF86
+import Graphics.X11.Xrandr (xrrGetMonitors, xrr_moninf_primary, xrr_moninf_width)
 import System.Environment (lookupEnv)
 import System.FilePath ((</>))
 import System.Posix.Files (fileAccess)
@@ -126,9 +127,18 @@ myLayoutHook = full ||| tall
     ratio = 1 / 2
 
 mySB :: StatusBarConfig
-mySB = statusBarProp "xmobar" . withWindowSet $ \wset ->
-  let width = rect_width . screenRect . W.screenDetail . W.current $ wset
-      curWS = W.workspace . W.current $ wset
+mySB = statusBarProp "xmobar" $ do
+  wset <- gets windowset
+  dpy <- asks display
+
+  -- Get the primary monitor's width.
+  width <-
+    let curWidth = rect_width . screenRect . W.screenDetail $ W.current wset
+        f = maybe (fromIntegral curWidth) xrr_moninf_width . find xrr_moninf_primary
+     in io $ f . fromMaybe [] <$> xrrGetMonitors dpy (defaultRootWindow dpy) True
+
+  -- Assume single xmobar instance is only on the primary monitor.
+  let curWS = W.workspace . W.current $ wset
 
       nCharWS =
         sum . intersperse 1 $
