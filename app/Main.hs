@@ -21,30 +21,30 @@ import System.Environment (lookupEnv)
 import System.FilePath ((</>))
 import System.Posix.Files (fileAccess)
 import XMonad
-import XMonad.Actions.CopyWindow
+import XMonad.Actions.CopyWindow (copyToAll, killAllOtherCopies)
 import XMonad.Actions.EasyMotion (selectWindow)
-import XMonad.Actions.WindowGo
+import XMonad.Actions.WindowGo (raiseBrowser, runOrRaise)
 import XMonad.Config.A5ob7r.ColorScheme
-import XMonad.Hooks.EwmhDesktops
-import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.EwmhDesktops (ewmh)
+import XMonad.Hooks.ManageHelpers (isInProperty)
 import XMonad.Hooks.RefocusLast (isFloat)
-import XMonad.Hooks.Rescreen
-import XMonad.Hooks.Script
-import XMonad.Hooks.StatusBar
-import XMonad.Hooks.StatusBar.PP
-import XMonad.Layout.IfMax
-import XMonad.Layout.NoBorders
-import XMonad.Layout.Renamed
-import XMonad.Layout.ResizableTile
-import XMonad.Layout.TrackFloating
-import XMonad.Prompt
-import XMonad.Prompt.FuzzyMatch
-import XMonad.Prompt.Shell hiding (split)
-import XMonad.Prompt.Window
-import XMonad.Prompt.XMonad
+import XMonad.Hooks.Rescreen (RescreenConfig (..), rescreenHook)
+import XMonad.Hooks.Script (execScriptHook)
+import XMonad.Hooks.StatusBar (StatusBarConfig, defToggleStrutsKey, statusBarProp, withEasySB)
+import XMonad.Hooks.StatusBar.PP (PP (..), wrap, xmobarBorder, xmobarColor, xmobarPP)
+import XMonad.Layout.IfMax (IfMax (IfMax))
+import XMonad.Layout.NoBorders (noBorders)
+import XMonad.Layout.Renamed (Rename (Replace), renamed)
+import XMonad.Layout.ResizableTile (MirrorResize (..), ResizableTall (..))
+import XMonad.Layout.TrackFloating (trackFloating)
+import XMonad.Prompt (XPConfig (..), XPPosition (..))
+import XMonad.Prompt.FuzzyMatch (fuzzyMatch, fuzzySort)
+import XMonad.Prompt.Shell (shellPrompt)
+import XMonad.Prompt.Window (WindowPrompt (..), allWindows, windowPrompt)
+import XMonad.Prompt.XMonad (xmonadPrompt)
 import qualified XMonad.StackSet as W
-import XMonad.Util.Cursor
-import XMonad.Util.EZConfig
+import XMonad.Util.Cursor (setDefaultCursor)
+import XMonad.Util.EZConfig (additionalKeys)
 
 main :: IO ()
 main = do
