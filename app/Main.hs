@@ -8,7 +8,7 @@ module Main (main) where
 import Control.Exception (IOException, catch)
 import Control.Monad ((>=>))
 import Control.Monad.Extra (allM, findM)
-import Control.Monad.Trans.Maybe (MaybeT (..), runMaybeT)
+import Control.Monad.Trans.Maybe (MaybeT (..))
 import Data.Char (isAscii)
 import Data.Foldable (asum)
 import Data.Function (fix)
