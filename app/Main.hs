@@ -8,10 +8,10 @@ module Main (main) where
 import Control.Exception (IOException, catch)
 import Control.Monad ((>=>))
 import Control.Monad.Extra (allM, findM)
-import Data.Char (isAscii, toLower)
+import Data.Char (isAscii)
 import Data.Function (fix)
 import Data.List (find, intersperse, scanl')
-import Data.List.Extra (headDef, split)
+import Data.List.Extra (headDef, lower, split)
 import Data.Maybe (catMaybes, fromMaybe, isJust)
 import Graphics.X11.ExtraTypes.XF86
 import Graphics.X11.Xrandr (xrrGetMonitors, xrr_moninf_primary, xrr_moninf_width)
@@ -213,10 +213,7 @@ myManageHook = isInProperty "_NET_WM_STATE" "_NET_WM_STATE_ABOVE" --> doFloat
 raiseTerminal :: X ()
 raiseTerminal = do
   term <- asks $ terminal . config
-  runOrRaise term (className' =? term <||> appName' =? term)
-  where
-    className' = map toLower <$> className
-    appName' = map toLower <$> appName
+  runOrRaise term $ (lower <$> className) =? term <||> (lower <$> appName) =? term
 
 -- | Change font config if doesn't show prompt with 'def'.
 myXPConfig :: XPConfig
