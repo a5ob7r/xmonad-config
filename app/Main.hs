@@ -8,11 +8,13 @@ module Main (main) where
 import Control.Exception (IOException, catch)
 import Control.Monad ((>=>))
 import Control.Monad.Extra (allM, findM)
+import Control.Monad.Trans.Maybe (MaybeT (..), runMaybeT)
 import Data.Char (isAscii)
+import Data.Foldable (asum)
 import Data.Function (fix)
 import Data.List (find, intersperse, scanl')
-import Data.List.Extra (headDef, lower, split)
-import Data.Maybe (catMaybes, fromMaybe, isJust)
+import Data.List.Extra (lower, split)
+import Data.Maybe (fromMaybe, isJust)
 import Graphics.X11.ExtraTypes.XF86
 import Graphics.X11.Xrandr (xrrGetMonitors, xrr_moninf_primary, xrr_moninf_width)
 import System.Environment (lookupEnv)
@@ -47,9 +49,9 @@ import XMonad.Util.EZConfig
 main :: IO ()
 main = do
   myTerminal <-
-    fmap (headDef "xterm" . catMaybes) . sequence $
-      (lookupEnv <$> ["XMONAD_TERMINAL", "TERMINAL"])
-        <> ((\term -> fmap (const term) <$> which term) <$> ["st-256color", "st", "alacritty", "urxvt"])
+    let envs = MaybeT . lookupEnv <$> ["XMONAD_TERMINAL", "TERMINAL"]
+        terms = (\term -> term <$ MaybeT (which term)) <$> ["st-256color", "st", "alacritty", "urxvt"]
+     in fromMaybe "xterm" <$> (runMaybeT . asum $ envs <> terms)
 
   xmonad . withEasySB mySB defToggleStrutsKey . ewmh . rescreenHook myRescreenConfig $
     def
