@@ -12,10 +12,7 @@ flag pedantic
   manual:      True
 
 common common-options
-  -- GHC 9.2.* until 9.2.3 have a bug related to 'keepAlive#' primitive, and
-  -- this frequently causes a xmonad binary's crash by segfault.
-  -- <https://gitlab.haskell.org/ghc/ghc/-/issues/21708#note_440043>
-  build-depends:    base >=4.14 && <4.16 || >=4.16.3
+  build-depends:    base >=4.14 && <4.18
   ghc-options:
     -Wall -Wredundant-constraints -Wpartial-fields -Wunused-packages
     -Widentities
@@ -40,8 +37,8 @@ executable myxmonad
     , transformers    ^>=0.5.6.2
     , unix            ^>=2.7.3
     , X11             ^>=1.10.2
-    , xmonad          ^>=0.17
+    , xmonad          ^>=0.17.1
     , xmonad-config
-    , xmonad-contrib  ^>=0.17
+    , xmonad-contrib  ^>=0.17.1
 
   ghc-options:    -Wno-missing-signatures
