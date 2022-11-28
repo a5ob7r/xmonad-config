@@ -62,7 +62,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Run ormolu
-        uses: mrkkrp/ormolu-action@v7
+        uses: mrkkrp/ormolu-action@v8
 
   cabal-format:
     runs-on: ubuntu-latest
