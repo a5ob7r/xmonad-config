@@ -36,9 +36,6 @@ jobs:
           restore-keys: |
             build-${{ runner.os }}-${{ matrix.ghc }}-
 
-      - name: Add path
-        run: echo ~/.cabal/bin >> "$GITHUB_PATH"
-
       - name: Install dependencies
         run: |
           sudo apt-get update
@@ -87,9 +84,6 @@ jobs:
           key: format-${{ runner.os }}-${{ matrix.ghc }}-${{ hashFiles('cabal.project') }}
           restore-keys: |
             format-${{ runner.os }}-${{ matrix.ghc }}-
-
-      - name: Add path
-        run: echo ~/.cabal/bin >> "$GITHUB_PATH"
 
       - name: Install cabal-fmt
         run: cabal install --overwrite-policy=always -j cabal-fmt
