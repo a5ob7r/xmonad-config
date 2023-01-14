@@ -15,8 +15,10 @@ has () {
 }
 
 wallpaper () {
-  if has feh && [[ -r ~/.wallpaper ]]; then
-    feh --no-fehbg --bg-scale ~/.wallpaper
+  if [[ -x ~/.fehbg ]]; then
+    ~/.fehbg
+  elif has feh && [[ -r ~/.wallpaper ]]; then
+    feh --no-fehbg --bg-max ~/.wallpaper
   fi
 }
 
