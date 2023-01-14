@@ -148,8 +148,8 @@ mySB = statusBarProp "xmobar" $ do
             <> [2 + length (W.tag . W.workspace $ sc) | sc <- W.visible wset]
             <> [length (W.tag hws) | hws <- W.hidden wset, isJust (W.stack hws)]
       nCharLayout = length . description $ W.layout curWS
-      nCharLeft = 1 + nCharWS + 3 + nCharLayout + 3
-      nCharRight = 82
+      nCharLeft = 1 + nCharWS + 2 + nCharLayout + 2
+      nCharRight = 70
 
       -- A monospace glyph width on xmobar. This value is determined by our
       -- config and environment.
@@ -158,10 +158,14 @@ mySB = statusBarProp "xmobar" $ do
       nChar = max (glyphWidth * 5) (fromIntegral width - (nCharLeft + nCharRight) * glyphWidth) `div` glyphWidth
    in return $
         xmobarPP
-          { ppSep = wrap " " " " $ xmobarColor' (brightBlack colorscheme) ":",
-            ppCurrent = xmobarColor' (yellow colorscheme) . wrap "[" "]",
-            ppLayout = xmobarUnderline (white colorscheme) 4,
-            ppTitle = xmobarUnderline (green colorscheme) 4 . xmobarColor' (green colorscheme) . shortenFW nChar
+          { ppSep = "  ",
+            ppCurrent = xmobarUnderline (yellow colorscheme) 4 . xmobarColor' (yellow colorscheme) . wrap "[" "]",
+            ppVisible = xmobarUnderline (yellow colorscheme) 4 . wrap "(" ")",
+            ppHidden = xmobarUnderline (yellow colorscheme) 4,
+            ppUrgent = xmobarUnderline (yellow colorscheme) 4 . xmobarColor' (red colorscheme),
+            ppWsSep = " ",
+            ppLayout = xmobarUnderline (yellow colorscheme) 4,
+            ppTitle = xmobarUnderline (yellow colorscheme) 4 . xmobarColor' (foreground colorscheme) . shortenFW nChar
           }
   where
     xmobarColor' fg = xmobarColor fg $ background colorscheme
