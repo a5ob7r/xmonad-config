@@ -1,4 +1,4 @@
-Config { font = "xft:monospace:bold:size=30:antialias=true,xft:monospace"
+Config { font = "Monospace Bold 30"
        , alpha = 0
        , bgColor = "#16242c"
        , fgColor = "#c0c4cd"
