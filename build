@@ -78,6 +78,7 @@ install_xmonad () {
     return 1
   fi
 
+  # NOTE: xmonad binaries built by cabal-3.8.1.0 can't create xft font sets.
   cabal install \
     --installdir="$dest_dir" \
     --install-method=copy \
