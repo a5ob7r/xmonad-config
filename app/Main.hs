@@ -257,7 +257,7 @@ isFocusFloat :: X Bool
 isFocusFloat = withWindowSet $ maybe (return False) (runQuery isFloat) . W.peek
 
 -- | A naive haskell implementation of @which@, which is a UNIX command to get the full-path of a executable.
-which :: MonadIO m => FilePath -> m (Maybe FilePath)
+which :: (MonadIO m) => FilePath -> m (Maybe FilePath)
 which epath = liftIO (lookupEnv "PATH") >>= findM isExecutable . map (</> epath) . split (== ':') . fromMaybe ""
   where
     isExecutable path = liftIO $ fileAccess path False False True `catch` \(_ :: IOException) -> return False
