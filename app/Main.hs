@@ -72,7 +72,7 @@ main = do
           ((noModMask, xF86XK_AudioRaiseVolume), spawn "amixer set Master 1%+"),
           ((noModMask, xF86XK_AudioMute), spawn "amixer set Master toggle"),
           ((noModMask, xF86XK_AudioMicMute), spawn "amixer sset Capture toggle"),
-          ((noModMask, xF86XK_Display), spawn "xrandr --auto"),
+          ((noModMask, xF86XK_Display), spawn "autorandr --change"),
           ((mask, xK_u), spawn "picom-trans -c +2"),
           ((mask, xK_d), spawn "picom-trans -c -2"),
           ((noModMask, xK_Print), spawn "xcapture root"),
