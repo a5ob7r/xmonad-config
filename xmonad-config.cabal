@@ -35,9 +35,9 @@ executable myxmonad
     , extra           ^>=1.7.10
     , filepath        ^>=1.4.100.0
     , transformers    ^>=0.5.6.2
-    , unix            ^>=2.7.3
+    , unix            ^>=2.8
     , X11             ^>=1.10.2
-    , xmonad          ^>=0.17.1
+    , xmonad          ^>=0.17.2
     , xmonad-config
     , xmonad-contrib  ^>=0.17.1
 
