@@ -12,7 +12,7 @@ flag pedantic
   manual:      True
 
 common common-options
-  build-depends:    base >=4.14 && <4.18
+  build-depends:    base >=4.14 && <4.19
   ghc-options:
     -Wall -Wredundant-constraints -Wpartial-fields -Wunused-packages
     -Widentities
