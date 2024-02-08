@@ -32,11 +32,11 @@ executable myxmonad
   main-is:        Main.hs
   hs-source-dirs: app
   build-depends:
-    , extra           ^>=1.7.10
-    , filepath        ^>=1.4.100.0
-    , transformers    ^>=0.5.6.2
+    , extra
+    , filepath
+    , transformers
     , unix            ^>=2.8
-    , X11             ^>=1.10.2
+    , X11             >=1.7
     , xmonad          ^>=0.18
     , xmonad-config
     , xmonad-contrib  ^>=0.18
