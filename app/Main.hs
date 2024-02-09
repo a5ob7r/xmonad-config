@@ -32,11 +32,11 @@ import XMonad.Hooks.Rescreen (RescreenConfig (..), rescreenHook)
 import XMonad.Hooks.Script (execScriptHook)
 import XMonad.Hooks.StatusBar (StatusBarConfig, defToggleStrutsKey, statusBarProp, withEasySB)
 import XMonad.Hooks.StatusBar.PP (PP (..), wrap, xmobarBorder, xmobarColor, xmobarPP)
+import XMonad.Layout.FocusTracking (focusTracking)
 import XMonad.Layout.IfMax (IfMax (IfMax))
 import XMonad.Layout.NoBorders (noBorders)
 import XMonad.Layout.Renamed (Rename (Replace), renamed)
 import XMonad.Layout.ResizableTile (MirrorResize (..), ResizableTall (..))
-import XMonad.Layout.TrackFloating (trackFloating)
 import XMonad.Prompt (XPConfig (..), XPPosition (..))
 import XMonad.Prompt.FuzzyMatch (fuzzyMatch, fuzzySort)
 import XMonad.Prompt.Shell (shellPrompt)
@@ -110,7 +110,7 @@ myRescreenConfig = RescreenConfig {..}
 -- bordering around the windows to indicate the window focus.
 myLayoutHook = full ||| tall
   where
-    full = renamed [Replace "Full"] . trackFloating $ noBorders Full
+    full = renamed [Replace "Full"] . focusTracking $ noBorders Full
 
     -- The Tall layout which has no master area means just equal size multiple
     -- rows and just a single column. If you want to use two column layout,
