@@ -27,7 +27,7 @@ jobs:
       - name: Freeze dependencies
         run: cabal freeze
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: ${{ steps.setup-haskell.outputs.cabal-store }}
           key: build-${{ runner.os }}-${{ matrix.ghc }}-${{ hashFiles('cabal.project.freeze') }}
@@ -74,7 +74,7 @@ jobs:
         with:
           ghc-version: ${{ matrix.ghc }}
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: ${{ steps.setup-haskell.outputs.cabal-store }}
           key: format-${{ runner.os }}-${{ matrix.ghc }}-${{ hashFiles('cabal.project') }}
