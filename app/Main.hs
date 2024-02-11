@@ -1,4 +1,3 @@
-{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ScopedTypeVariables #-}
@@ -6,11 +5,9 @@
 module Main (main) where
 
 import Control.Exception (IOException, catch)
-import Control.Monad ((>=>))
-import Control.Monad.Extra (allM, findM)
+import Control.Monad.Extra (findM)
 import Control.Monad.Trans.Maybe (MaybeT (..))
 import Data.Foldable (asum)
-import Data.Function (fix)
 import Data.List (find, intersperse)
 import Data.List.Extra (split)
 import Data.Maybe (fromMaybe, isJust)
@@ -27,7 +24,6 @@ import XMonad.Actions.WindowGo.Extra (raiseTerminal)
 import XMonad.Config.A5ob7r.ColorScheme
 import XMonad.Hooks.EwmhDesktops (ewmh)
 import XMonad.Hooks.ManageHelpers (isInProperty)
-import XMonad.Hooks.RefocusLast (isFloat)
 import XMonad.Hooks.Rescreen (RescreenConfig (..), rescreenHook)
 import XMonad.Hooks.Script (execScriptHook)
 import XMonad.Hooks.StatusBar (StatusBarConfig, defToggleStrutsKey, statusBarProp, withEasySB)
@@ -38,6 +34,7 @@ import XMonad.Layout.IfMax (IfMax (IfMax))
 import XMonad.Layout.NoBorders (noBorders)
 import XMonad.Layout.Renamed (named)
 import XMonad.Layout.ResizableTile (MirrorResize (..), ResizableTall (..))
+import XMonad.Operations.Extra (focusDownWithFloatSkipping, focusUpWithFloatSkipping)
 import XMonad.Prompt (XPConfig (..), XPPosition (..))
 import XMonad.Prompt.FuzzyMatch (fuzzyMatch, fuzzySort)
 import XMonad.Prompt.Shell (shellPrompt)
@@ -86,8 +83,8 @@ main = do
           ((mask, xK_v), windows copyToAll),
           ((mask, xK_x), killAllOtherCopies),
           ((mask, xK_f), selectWindow def >>= (`whenJust` windows . W.focusWindow)),
-          ((mask, xK_j), focusSkipFloat W.focusDown),
-          ((mask, xK_k), focusSkipFloat W.focusUp)
+          ((mask, xK_j), focusDownWithFloatSkipping),
+          ((mask, xK_k), focusUpWithFloatSkipping)
         ]
 
 -- | A wrapper of 'additionalKeys' to get the current mod-mask key from
@@ -193,25 +190,6 @@ myXPConfig =
       searchPredicate = fuzzyMatch,
       sorter = fuzzySort
     }
-
--- | A wrapper of 'windows' to skip floating windows when switch the window
--- focus. If all of windows on the workspace is floating, this function runs
--- @f@ just once. Otherwise this function runs @f@ until fucuses a non-floating
--- window.
---
--- FIXME: This function assumes that @f@ is only 'W.focusDown' or 'W.focusUp'.
--- This means that @f@ must rotate the window focus. If @f@ doesn't it, this
--- function probably causes an infinite loop.
-focusSkipFloat :: (WindowSet -> WindowSet) -> X ()
-focusSkipFloat f =
-  withWindowSet $
-    allM (runQuery isFloat) . W.index >=> \case
-      True -> windows f
-      False -> windows f >> fix (\more -> whenX isFocusFloat $ windows f >> more)
-
--- | Whether or not the focused window on the current workspace is floating.
-isFocusFloat :: X Bool
-isFocusFloat = withWindowSet $ maybe (return False) (runQuery isFloat) . W.peek
 
 -- | A naive haskell implementation of @which@, which is a UNIX command to get the full-path of a executable.
 which :: (MonadIO m) => FilePath -> m (Maybe FilePath)

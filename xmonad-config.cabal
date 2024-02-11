@@ -34,6 +34,7 @@ library
     XMonad.Actions.WindowGo.Extra
     XMonad.Config.A5ob7r.ColorScheme
     XMonad.Hooks.StatusBar.PP.Extra
+    XMonad.Operations.Extra
 
 executable myxmonad
   import:         common-options
