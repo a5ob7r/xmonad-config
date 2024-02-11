@@ -9,10 +9,9 @@ import Control.Exception (IOException, catch)
 import Control.Monad ((>=>))
 import Control.Monad.Extra (allM, findM)
 import Control.Monad.Trans.Maybe (MaybeT (..))
-import Data.Char (isAscii)
 import Data.Foldable (asum)
 import Data.Function (fix)
-import Data.List (find, intersperse, scanl')
+import Data.List (find, intersperse)
 import Data.List.Extra (split)
 import Data.Maybe (fromMaybe, isJust)
 import Graphics.X11.ExtraTypes.XF86
@@ -33,6 +32,7 @@ import XMonad.Hooks.Rescreen (RescreenConfig (..), rescreenHook)
 import XMonad.Hooks.Script (execScriptHook)
 import XMonad.Hooks.StatusBar (StatusBarConfig, defToggleStrutsKey, statusBarProp, withEasySB)
 import XMonad.Hooks.StatusBar.PP (PP (..), wrap, xmobarBorder, xmobarColor, xmobarPP)
+import XMonad.Hooks.StatusBar.PP.Extra (shortenFW)
 import XMonad.Layout.FocusTracking (focusTracking)
 import XMonad.Layout.IfMax (IfMax (IfMax))
 import XMonad.Layout.NoBorders (noBorders)
@@ -174,33 +174,6 @@ mySB = statusBarProp "xmobar" $ do
 
 colorscheme :: OceanicNext
 colorscheme = OceanicNext
-
--- | Custom version of 'XMonad.Hooks.StatusBar.PP.shorten'. This treats full
--- width characters' width as double of ascii characters.
---
--- > shortenFW 3 "foo"
--- "foo"
---
--- > shortenFW 3 "foobar"
--- "..."
---
--- > shortenFW 3 "あいう"
--- "..."
---
--- > shortenFW 5 "あいう"
--- "\12354..."
---
--- > shortenFW 6 "あいう"
--- "\12354\12356\12358"
-shortenFW :: Int -> String -> String
-shortenFW n s =
-  if length s == l
-    then s
-    else take l' s <> "..."
-  where
-    weights = (\c -> 1 + fromEnum (not . isAscii $ c)) <$> s
-    l = length . takeWhile (<= n) . scanl1 (+) $ weights
-    l' = length . tail . takeWhile (<= n) . scanl' (+) 3 $ weights
 
 myManageHook :: ManageHook
 myManageHook = isInProperty "_NET_WM_STATE" "_NET_WM_STATE_ABOVE" --> doFloat
