@@ -1,4 +1,3 @@
-{-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
@@ -35,7 +34,7 @@ import XMonad.Prompt.Window (WindowPrompt (..), allWindows, windowPrompt)
 import XMonad.Prompt.XMonad (xmonadPrompt)
 import qualified XMonad.StackSet as W
 import XMonad.Util.Cursor (setDefaultCursor)
-import XMonad.Util.EZConfig (additionalKeys)
+import XMonad.Util.EZConfig.Extra (additionalKeys')
 
 myxmonad :: IO ()
 myxmonad = do
@@ -76,11 +75,6 @@ myxmonad = do
           ((mask, xK_j), focusDownWithFloatSkipping),
           ((mask, xK_k), focusUpWithFloatSkipping)
         ]
-
--- | A wrapper of 'additionalKeys' to get the current mod-mask key from
--- 'XConfig'.
-additionalKeys' :: XConfig a -> (KeyMask -> [((KeyMask, KeySym), X ())]) -> XConfig a
-additionalKeys' c@XConfig {modMask} f = c `additionalKeys` f modMask
 
 myStartupHook :: X ()
 myStartupHook = do

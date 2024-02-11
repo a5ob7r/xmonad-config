@@ -40,6 +40,7 @@ library
     XMonad.Hooks.StatusBar.PP.Extra
     XMonad.Operations.Extra
     XMonad.Prompt.Shell.Extra
+    XMonad.Util.EZConfig.Extra
 
 executable myxmonad
   import:         common-options
