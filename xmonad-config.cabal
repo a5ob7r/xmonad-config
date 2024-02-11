@@ -25,7 +25,14 @@ common common-options
 library
   import:          common-options
   hs-source-dirs:  src
-  exposed-modules: XMonad.Config.A5ob7r.ColorScheme
+  build-depends:
+    , extra
+    , xmonad          ^>=0.18
+    , xmonad-contrib  ^>=0.18
+
+  exposed-modules:
+    XMonad.Actions.WindowGo.Extra
+    XMonad.Config.A5ob7r.ColorScheme
 
 executable myxmonad
   import:         common-options

@@ -13,7 +13,7 @@ import Data.Char (isAscii)
 import Data.Foldable (asum)
 import Data.Function (fix)
 import Data.List (find, intersperse, scanl')
-import Data.List.Extra (lower, split)
+import Data.List.Extra (split)
 import Data.Maybe (fromMaybe, isJust)
 import Graphics.X11.ExtraTypes.XF86
 import Graphics.X11.Xrandr (xrrGetMonitors, xrr_moninf_primary, xrr_moninf_width)
@@ -23,7 +23,8 @@ import System.Posix.Files (fileAccess)
 import XMonad
 import XMonad.Actions.CopyWindow (copyToAll, killAllOtherCopies)
 import XMonad.Actions.EasyMotion (selectWindow)
-import XMonad.Actions.WindowGo (raiseBrowser, runOrRaise)
+import XMonad.Actions.WindowGo (raiseBrowser)
+import XMonad.Actions.WindowGo.Extra (raiseTerminal)
 import XMonad.Config.A5ob7r.ColorScheme
 import XMonad.Hooks.EwmhDesktops (ewmh)
 import XMonad.Hooks.ManageHelpers (isInProperty)
@@ -203,23 +204,6 @@ shortenFW n s =
 
 myManageHook :: ManageHook
 myManageHook = isInProperty "_NET_WM_STATE" "_NET_WM_STATE_ABOVE" --> doFloat
-
--- | A terminal version of 'raiseBrowser' or 'raiseEditor' in
--- "XMonad.Actions.WindowGo" with extra.
---
--- Like above two function, the terminal appcaliation's name is
--- case-insensitive.
---
--- Unlike above two function, this queries not only 'className', but also
--- 'appName' using the terminal appcaliation's name.
---
--- * 'appName' is the first element in @WM_CLASS(STRING)@.
--- * 'className' is the second element in @WM_CLASS(STRING)@.
--- <https://wiki.haskell.org/Xmonad/Frequently_asked_questions>
-raiseTerminal :: X ()
-raiseTerminal = do
-  term <- asks $ terminal . config
-  runOrRaise term $ (lower <$> className) =? term <||> (lower <$> appName) =? term
 
 -- | Change font config if doesn't show prompt with 'def'.
 myXPConfig :: XPConfig
