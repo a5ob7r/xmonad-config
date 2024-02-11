@@ -27,6 +27,7 @@ library
   hs-source-dirs:  src
   build-depends:
     , extra
+    , transformers
     , xmonad          ^>=0.18
     , xmonad-contrib  ^>=0.18
 
@@ -35,16 +36,13 @@ library
     XMonad.Config.A5ob7r.ColorScheme
     XMonad.Hooks.StatusBar.PP.Extra
     XMonad.Operations.Extra
+    XMonad.Prompt.Shell.Extra
 
 executable myxmonad
   import:         common-options
   main-is:        Main.hs
   hs-source-dirs: app
   build-depends:
-    , extra
-    , filepath
-    , transformers
-    , unix            ^>=2.8
     , X11             >=1.7
     , xmonad          ^>=0.18
     , xmonad-config

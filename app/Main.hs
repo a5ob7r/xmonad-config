@@ -4,18 +4,10 @@
 
 module Main (main) where
 
-import Control.Exception (IOException, catch)
-import Control.Monad.Extra (findM)
-import Control.Monad.Trans.Maybe (MaybeT (..))
-import Data.Foldable (asum)
 import Data.List (find, intersperse)
-import Data.List.Extra (split)
 import Data.Maybe (fromMaybe, isJust)
 import Graphics.X11.ExtraTypes.XF86
 import Graphics.X11.Xrandr (xrrGetMonitors, xrr_moninf_primary, xrr_moninf_width)
-import System.Environment (lookupEnv)
-import System.FilePath ((</>))
-import System.Posix.Files (fileAccess)
 import XMonad
 import XMonad.Actions.CopyWindow (copyToAll, killAllOtherCopies)
 import XMonad.Actions.EasyMotion (selectWindow)
@@ -38,6 +30,7 @@ import XMonad.Operations.Extra (focusDownWithFloatSkipping, focusUpWithFloatSkip
 import XMonad.Prompt (XPConfig (..), XPPosition (..))
 import XMonad.Prompt.FuzzyMatch (fuzzyMatch, fuzzySort)
 import XMonad.Prompt.Shell (shellPrompt)
+import XMonad.Prompt.Shell.Extra (getTerminal)
 import XMonad.Prompt.Window (WindowPrompt (..), allWindows, windowPrompt)
 import XMonad.Prompt.XMonad (xmonadPrompt)
 import qualified XMonad.StackSet as W
@@ -46,10 +39,7 @@ import XMonad.Util.EZConfig (additionalKeys)
 
 main :: IO ()
 main = do
-  myTerminal <-
-    let envs = MaybeT . lookupEnv <$> ["XMONAD_TERMINAL", "TERMINAL"]
-        terms = (\term -> term <$ MaybeT (which term)) <$> ["st-256color", "st", "alacritty", "urxvt"]
-     in fromMaybe "xterm" <$> (runMaybeT . asum $ envs <> terms)
+  myTerminal <- getTerminal
 
   xmonad . withEasySB mySB defToggleStrutsKey . ewmh . rescreenHook myRescreenConfig $
     def
@@ -190,9 +180,3 @@ myXPConfig =
       searchPredicate = fuzzyMatch,
       sorter = fuzzySort
     }
-
--- | A naive haskell implementation of @which@, which is a UNIX command to get the full-path of a executable.
-which :: (MonadIO m) => FilePath -> m (Maybe FilePath)
-which epath = liftIO (lookupEnv "PATH") >>= findM isExecutable . map (</> epath) . split (== ':') . fromMaybe ""
-  where
-    isExecutable path = liftIO $ fileAccess path False False True `catch` \(_ :: IOException) -> return False
