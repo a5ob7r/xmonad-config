@@ -22,9 +22,9 @@ import XMonad.Hooks.StatusBar.PP (PP (..), wrap, xmobarBorder, xmobarColor, xmob
 import XMonad.Hooks.StatusBar.PP.Extra (shortenFW)
 import XMonad.Layout.FocusTracking (focusTracking)
 import XMonad.Layout.IfMax (IfMax (IfMax))
-import XMonad.Layout.NoBorders (noBorders)
 import XMonad.Layout.Renamed (named)
 import XMonad.Layout.ResizableTile (MirrorResize (..), ResizableTall (..))
+import XMonad.Layout.VoidBorders (normalBorders, voidBorders)
 import XMonad.Operations.Extra (focusDownWithFloatSkipping, focusUpWithFloatSkipping)
 import XMonad.Prompt (XPConfig (..), XPPosition (..))
 import XMonad.Prompt.FuzzyMatch (fuzzyMatch, fuzzySort)
@@ -92,7 +92,7 @@ myRescreenConfig = RescreenConfig {..}
 -- bordering around the windows to indicate the window focus.
 myLayoutHook = full ||| tall
   where
-    full = named "Full" . focusTracking $ noBorders Full
+    full = named "Full" . focusTracking $ voidBorders Full
 
     -- The Tall layout which has no master area means just equal size multiple
     -- rows and just a single column. If you want to use two column layout,
@@ -105,7 +105,7 @@ myLayoutHook = full ||| tall
     -- > sendMessage (IncMasterN (-1))
     --
     -- By default, Xmonad binds these actions to @Mod+,@ and @Mod-.@.
-    tall = named "Tall" . IfMax 1 full $ ResizableTall nMaster delta ratio []
+    tall = named "Tall" . IfMax 1 full . normalBorders $ ResizableTall nMaster delta ratio []
     nMaster = 0
     delta = 3 / 100
     ratio = 1 / 2
