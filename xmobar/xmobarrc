@@ -7,12 +7,12 @@ Config { font = "Monospace Bold 30"
        , commands = [ Run XMonadLog
                     , Run Alsa "default" "Master" [ "-t", "<box type=Bottom width=4 color=#fac862><status> <volume>%</box>"
                                                   , "--"
-                                                  , "--on", "\xfc58"
-                                                  , "--off", "\xfc59"
+                                                  , "--on", "\xf075a"
+                                                  , "--off", "\xf075b"
                                                   , "--onc", "#fac862"
                                                   , "--offc", "#ec5e66"
                                                   ]
-                    , Run Brightness [ "-t", "<box type=Bottom width=4 color=#fac862><fc=#fac862>\xfbe7</fc> <percent>%</box>"
+                    , Run Brightness [ "-t", "<box type=Bottom width=4 color=#fac862><fc=#fac862>\xf0335</fc> <percent>%</box>"
                                      , "--"
                                      , "-D", "intel_backlight"
                                      ] 3
@@ -21,20 +21,20 @@ Config { font = "Monospace Bold 30"
                                   , "-H", "80"
                                   , "--"
                                   , "-o", ""
-                                  , "-O", "<fc=#fac862>\xf583</fc>"
-                                  , "-i", "<fc=#ec5e66>\xf582</fc>"
-                                  , "--lows", "<fc=#ec5e66>\xf57a</fc>"
-                                  , "--mediums", "<fc=#fac862>\xf57d</fc>"
-                                  , "--highs", "<fc=#fac862>\xf580</fc>"
+                                  , "-O", "<fc=#fac862>\xf0084</fc>"
+                                  , "-i", "<fc=#ec5e66>\xf0084</fc>"
+                                  , "--lows", "<fc=#ec5e66>\x007c</fc>"
+                                  , "--mediums", "<fc=#f007e>\xf007e</fc>"
+                                  , "--highs", "<fc=#fac862>\xf0081</fc>"
                                   ] 10
-                    , Run Date "<box type=Bottom width=4 color=#fac862><fc=#fac862>\xf455</fc> %H:%M %F(%a)</box>" "date" 1
+                    , Run Date "<box type=Bottom width=4 color=#fac862><fc=#fac862>\xeab0</fc> %H:%M %F(%a)</box>" "date" 1
                     , Run Cpu [ "--template", "<box type=Bottom width=4 color=#fac862><total>%</box>"
                               , "--minwidth", "2"
-                              , "--low", "#fac862>\xf85a</fc> <fc=#c0c4cd"
-                              , "--normal", "#fac862>\xf85a</fc> <fc=#c0c4cd"
-                              , "--high", "#ec5e66>\xf85a</fc> <fc=#c0c4cd"
+                              , "--low", "#fac862>\xf4bc</fc> <fc=#c0c4cd"
+                              , "--normal", "#fac862>\xf4bc</fc> <fc=#c0c4cd"
+                              , "--high", "#ec5e66>\xf4bc</fc> <fc=#c0c4cd"
                               ] 5
-                    , Run Memory [ "--template", "<box type=Bottom width=4 color=#fac862><fc=#fac862>\xf85a</fc> <usedratio>% (<cache>M)</box>"
+                    , Run Memory [ "--template", "<box type=Bottom width=4 color=#fac862><fc=#fac862>\xf035b</fc> <usedratio>% (<cache>M)</box>"
                                  , "--minwidth", "2"
                                  ] 5
                     ]
