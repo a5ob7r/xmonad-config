@@ -28,4 +28,4 @@ shortenFW n s =
   where
     weights = (\c -> 1 + fromEnum (not . isAscii $ c)) <$> s
     l = length . takeWhile (<= n) . scanl1 (+) $ weights
-    l' = length . tail . takeWhile (<= n) . scanl' (+) 3 $ weights
+    l' = length . drop 1 . takeWhile (<= n) . scanl' (+) 3 $ weights
