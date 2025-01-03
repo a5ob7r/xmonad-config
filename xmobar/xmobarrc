@@ -23,7 +23,7 @@ Config { font = "Monospace Bold 30"
                                   , "-o", ""
                                   , "-O", "<fc=#fac862>\xf0084</fc>"
                                   , "-i", "<fc=#ec5e66>\xf0084</fc>"
-                                  , "--lows", "<fc=#ec5e66>\x007c</fc>"
+                                  , "--lows", "<fc=#ec5e66>\xf007c</fc>"
                                   , "--mediums", "<fc=#f007e>\xf007e</fc>"
                                   , "--highs", "<fc=#fac862>\xf0081</fc>"
                                   ] 10
