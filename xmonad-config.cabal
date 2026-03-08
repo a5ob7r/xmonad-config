@@ -32,7 +32,6 @@ library
     , xmonad          ^>=0.18.1
     , xmonad-contrib  ^>=0.18.2
 
-  ghc-options:     -Wno-missing-signatures
   exposed-modules: XMonad.A5ob7r
   other-modules:
     XMonad.Actions.WindowGo.Extra
