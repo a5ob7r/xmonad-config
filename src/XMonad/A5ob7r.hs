@@ -8,7 +8,6 @@ import Data.Maybe (fromMaybe, isJust)
 import Graphics.X11.ExtraTypes.XF86
 import Graphics.X11.Xrandr (xrrGetMonitors, xrr_moninf_primary, xrr_moninf_width)
 import XMonad
-import XMonad.Actions.CopyWindow (copyToAll, killAllOtherCopies)
 import XMonad.Actions.EasyMotion (selectWindow)
 import XMonad.Actions.WindowGo (raiseBrowser)
 import XMonad.Actions.WindowGo.Extra (raiseTerminal)
@@ -35,12 +34,13 @@ import XMonad.Prompt.XMonad (xmonadPrompt)
 import qualified XMonad.StackSet as W
 import XMonad.Util.Cursor (setDefaultCursor)
 import XMonad.Util.EZConfig.Extra (additionalKeys')
+import XMonad.Util.StickyWindows (stick, sticky, unstick)
 
 myxmonad :: IO ()
 myxmonad = do
   myTerminal <- getTerminal
 
-  xmonad . withEasySB mySB defToggleStrutsKey . ewmh . rescreenHook myRescreenConfig $
+  xmonad . withEasySB mySB defToggleStrutsKey . sticky . ewmh . rescreenHook myRescreenConfig $
     def
       { focusedBorderColor = red colorscheme,
         layoutHook = myLayoutHook,
@@ -69,8 +69,8 @@ myxmonad = do
           ((mask, xK_z), sendMessage MirrorExpand),
           ((mask, xK_Return), raiseTerminal),
           ((mask .|. controlMask, xK_Return), raiseBrowser),
-          ((mask, xK_v), windows copyToAll),
-          ((mask, xK_x), killAllOtherCopies),
+          ((mask, xK_v), withFocused stick),
+          ((mask, xK_x), withFocused unstick),
           ((mask, xK_f), selectWindow def >>= (`whenJust` windows . W.focusWindow)),
           ((mask, xK_j), focusDownWithFloatSkipping),
           ((mask, xK_k), focusUpWithFloatSkipping)
