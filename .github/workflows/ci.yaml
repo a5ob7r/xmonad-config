@@ -94,8 +94,6 @@ jobs:
       - uses: actions/checkout@v6
 
       - uses: haskell-actions/hlint-setup@v2
-        with:
-          version: '3.8'
 
       - uses: haskell-actions/hlint-run@v2
         with:
