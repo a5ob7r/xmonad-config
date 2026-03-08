@@ -98,7 +98,6 @@ jobs:
       - uses: haskell-actions/hlint-run@v2
         with:
           fail-on: status
-          path: '["app/"]'
 
   shellcheck:
     runs-on: ubuntu-latest
