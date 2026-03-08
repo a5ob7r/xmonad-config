@@ -30,7 +30,7 @@ library
     , transformers
     , X11             >=1.7
     , xmonad          ^>=0.18.1
-    , xmonad-contrib  >=0.18    && <0.18.1.0
+    , xmonad-contrib  ^>=0.18.2
 
   ghc-options:     -Wno-missing-signatures
   exposed-modules: XMonad.A5ob7r

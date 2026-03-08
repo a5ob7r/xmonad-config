@@ -1,4 +1,4 @@
-{-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module XMonad.A5ob7r (myxmonad) where
@@ -82,7 +82,7 @@ myStartupHook = do
   execScriptHook "wallpaper"
 
 myRescreenConfig :: RescreenConfig
-myRescreenConfig = RescreenConfig {..}
+myRescreenConfig = def {afterRescreenHook, randrChangeHook}
   where
     afterRescreenHook = execScriptHook "wallpaper"
     randrChangeHook = execScriptHook "rescreen"
