@@ -7,28 +7,28 @@
 
 ```sh
 # Install dependencies to build xmoand.
-$ pacman -S xorg-server xorg-apps xorg-xinit xorg-xmessage libx11 libxft libxinerama libxrandr libxss pkgconf
+pacman -S xorg-server xorg-apps xorg-xinit xorg-xmessage libx11 libxft libxinerama libxrandr libxss pkgconf
 
 # Install dependencies for others.
-$ pacman -S git feh picom light alsa-utils autorandr imagemagick
+pacman -S git feh picom light alsa-utils autorandr imagemagick
 
 # Clone this repository.
-$ git clone https://github.com/a5ob7r/xmonad-config.git
-$ cd xmonad-config
+git clone https://github.com/a5ob7r/xmonad-config.git
+cd xmonad-config
 
 # Deploy configs.
-$ ln -sfv "$PWD" ~/.config/xmonad
-$ ln -sfv "$PWD/xmobar" ~/.config/xmobar
+ln -sfv "$PWD" ~/.config/xmonad
+ln -sfv "$PWD/xmobar" ~/.config/xmobar
 
 # Only install the xmonad executable, not as a library, to manage xmonad.
-$ cabal install --overwrite-policy=always xmonad
+cabal install --overwrite-policy=always xmonad
 
 # Install xmobar.
-$ cabal install --overwrite-policy=always --flags=all_extensions xmobar
+cabal install --overwrite-policy=always --flags=all_extensions xmobar
 
 # Build and install my xmonad executable.
-$ xmonad --recompile
+xmonad --recompile
 
 # Append a xmonad command to .xinitrc.
-$ echo 'exec xmonad' >> ~/.xinitrc
+echo 'exec xmonad' >> ~/.xinitrc
 ```
