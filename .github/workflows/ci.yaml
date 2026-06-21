@@ -64,7 +64,7 @@ jobs:
 
     strategy:
       matrix:
-        ghc: ['9.8']
+        ghc: ['9.12']
 
     steps:
       - uses: actions/checkout@v6
@@ -81,11 +81,13 @@ jobs:
           restore-keys: |
             format-${{ runner.os }}-${{ matrix.ghc }}-
 
-      - name: Install cabal-fmt
-        run: cabal install --overwrite-policy=always -j cabal-fmt
+      - name: Install cabal-gild
+        run: cabal install --overwrite-policy=always -j cabal-gild
 
-      - name: Run cabal-fmt
-        run: diff -y xmonad-config.cabal <(cabal-fmt xmonad-config.cabal)
+      - name: Run cabal-gild
+        run: |
+          cabal-gild
+          git diff --exit-code
 
   lint:
     runs-on: ubuntu-latest
