@@ -1,39 +1,41 @@
 cabal-version: 2.4
-name:          xmonad-config
-version:       0.1.0.0
-license:       BSD-3-Clause
-license-file:  LICENSE
-author:        a5ob7r
-maintainer:    12132068+a5ob7r@users.noreply.github.com
+name: 	xmonad-config
+version: 0.1.0.0
+license: BSD-3-Clause
+license-file: LICENSE
+author: a5ob7r
+maintainer: 12132068+a5ob7r@users.noreply.github.com
 
 flag pedantic
   description: Enable -Werror
-  default:     False
-  manual:      True
+  default: False
+  manual: True
 
 common common-options
   -- Support latest 2 major GHC versions that marked as "Suitable for use".
   --
   -- https://gitlab.haskell.org/ghc/ghc/-/wikis/GHC-status
-  build-depends:    base >=4.21 && <4.22
+  build-depends: base >=4.21 && <4.22
   ghc-options:
-    -Wall -Wredundant-constraints -Wpartial-fields -Wunused-packages
+    -Wall
+    -Wredundant-constraints
+    -Wpartial-fields
+    -Wunused-packages
     -Widentities
 
   if flag(pedantic)
     ghc-options: -Werror
-
   default-language: Haskell2010
 
 library
-  import:          common-options
-  hs-source-dirs:  src
+  import: common-options
+  hs-source-dirs: src
   build-depends:
-    , extra
-    , transformers
-    , X11             >=1.7
-    , xmonad          ^>=0.18.1
-    , xmonad-contrib  ^>=0.18.2
+    extra,
+    transformers,
+    X11 >=1.7,
+    xmonad ^>=0.18.1,
+    xmonad-contrib ^>=0.18.2,
 
   exposed-modules: XMonad.A5ob7r
   other-modules:
@@ -45,7 +47,7 @@ library
     XMonad.Util.EZConfig.Extra
 
 executable myxmonad
-  import:         common-options
-  main-is:        Main.hs
+  import: common-options
+  main-is: Main.hs
   hs-source-dirs: app
-  build-depends:  xmonad-config
+  build-depends: xmonad-config
