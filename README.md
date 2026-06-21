@@ -10,7 +10,8 @@
 pacman -S xorg-server xorg-apps xorg-xinit xorg-xmessage libx11 libxft libxinerama libxrandr libxss pkgconf
 
 # Install dependencies for others.
-pacman -S git feh picom light alsa-utils autorandr imagemagick
+pacman -S git feh picom alsa-utils autorandr imagemagick
+yay -S light
 
 # Clone this repository.
 git clone https://github.com/a5ob7r/xmonad-config.git
