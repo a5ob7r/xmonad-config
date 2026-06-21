@@ -64,27 +64,10 @@ jobs:
   cabal-format:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        ghc: ['9.12']
-
     steps:
       - uses: actions/checkout@v7
 
-      - uses: haskell-actions/setup@v2
-        id: setup-haskell
-        with:
-          ghc-version: ${{ matrix.ghc }}
-
-      - uses: actions/cache@v5
-        with:
-          path: ${{ steps.setup-haskell.outputs.cabal-store }}
-          key: format-${{ runner.os }}-${{ matrix.ghc }}-${{ hashFiles('cabal.project') }}
-          restore-keys: |
-            format-${{ runner.os }}-${{ matrix.ghc }}-
-
-      - name: Install cabal-gild
-        run: cabal install --overwrite-policy=always -j cabal-gild
+      - uses: tfausak/cabal-gild-setup-action@v2
 
       - name: Run cabal-gild
         run: |
