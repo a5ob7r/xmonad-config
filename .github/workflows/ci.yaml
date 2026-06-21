@@ -71,7 +71,7 @@ jobs:
 
       - name: Run cabal-gild
         run: |
-          cabal-gild
+          cabal-gild xmonad-config.cabal
           git diff --exit-code
 
   lint:
