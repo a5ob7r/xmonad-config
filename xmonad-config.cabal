@@ -12,7 +12,10 @@ flag pedantic
   manual:      True
 
 common common-options
-  build-depends:    base >=4.14 && <4.22
+  -- Support latest 2 major GHC versions that marked as "Suitable for use".
+  --
+  -- https://gitlab.haskell.org/ghc/ghc/-/wikis/GHC-status
+  build-depends:    base >=4.21 && <4.22
   ghc-options:
     -Wall -Wredundant-constraints -Wpartial-fields -Wunused-packages
     -Widentities
