@@ -107,11 +107,12 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: ludeeus/action-shellcheck@master
-        with:
-          additional_files: >
-            bin/xcapture
-            hooks
+      - name: Run shellcheck
+        run: |
+          shellcheck \
+            bin/xcapture \
+            hooks \
+            ;
 
   actionlint:
     runs-on: ubuntu-latest
