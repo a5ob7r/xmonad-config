@@ -15,7 +15,7 @@ common common-options
   -- Support latest 2 major GHC versions that marked as "Suitable for use".
   --
   -- https://gitlab.haskell.org/ghc/ghc/-/wikis/GHC-status
-  build-depends: base >=4.21 && <4.22
+  build-depends: base >=4.21 && <4.23
   ghc-options:
     -Wall
     -Wredundant-constraints

@@ -14,7 +14,9 @@ jobs:
 
     strategy:
       matrix:
-        ghc: ['9.12']
+        ghc:
+          - '9.12'
+          - '9.14'
 
     steps:
       - uses: actions/checkout@v7
