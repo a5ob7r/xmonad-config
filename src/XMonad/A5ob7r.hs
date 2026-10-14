@@ -116,7 +116,7 @@ mySB = statusBarProp "xmobar" $ do
   wset <- gets windowset
   dpy <- asks display
 
-  -- Get the primary monitor's width.
+  -- Get the primary monitor's width(pixels).
   width <-
     let curWidth = rect_width . screenRect . W.screenDetail $ W.current wset
         f = maybe (fromIntegral curWidth) xrr_moninf_width . find xrr_moninf_primary
@@ -133,12 +133,8 @@ mySB = statusBarProp "xmobar" $ do
       nCharLayout = length . description $ W.layout curWS
       nCharLeft = 1 + nCharWS + 2 + nCharLayout + 2
       nCharRight = 70
-
-      -- A monospace glyph width on xmobar. This value is determined by our
-      -- config and environment.
-      glyphWidth = 21
-
-      nChar = max (glyphWidth * 5) (fromIntegral width - (nCharLeft + nCharRight) * glyphWidth) `div` glyphWidth
+      maxNChars = fromIntegral width `div` glyphWidth
+      nChar = max 5 $ maxNChars - (nCharLeft + nCharRight)
    in return $
         xmobarPP
           { ppSep = "  ",
@@ -153,6 +149,13 @@ mySB = statusBarProp "xmobar" $ do
   where
     xmobarColor' fg = xmobarColor fg $ background colorscheme
     xmobarUnderline = xmobarBorder "Bottom"
+
+    -- A monospace glyph width(pixels) on xmobar.
+    glyphWidth = ceiling $ font_points * font_point_scale * inches_per_point * pixels_per_inch
+    font_points = 30 -- from 'font' option in xmobar configuratioon
+    font_point_scale = 1 / 2 -- for Hackgen(Halfwidth:Fullwidth = 1:2)
+    inches_per_point = 1 / 72
+    pixels_per_inch = 96 :: Rational -- DPI
 
 colorscheme :: OceanicNext
 colorscheme = OceanicNext
