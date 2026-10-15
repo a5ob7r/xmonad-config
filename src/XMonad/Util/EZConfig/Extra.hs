@@ -1,5 +1,3 @@
-{-# LANGUAGE NamedFieldPuns #-}
-
 module XMonad.Util.EZConfig.Extra (additionalKeys') where
 
 import XMonad

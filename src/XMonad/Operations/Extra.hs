@@ -7,7 +7,7 @@ import Control.Monad.Extra (allM)
 import Data.Function (fix)
 import XMonad
 import XMonad.Hooks.RefocusLast (isFloat)
-import qualified XMonad.StackSet as W
+import XMonad.StackSet qualified as W
 
 focusUpWithFloatSkipping :: X ()
 focusUpWithFloatSkipping = focusSkipFloat W.focusUp

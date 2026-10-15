@@ -1,5 +1,3 @@
-{-# LANGUAGE NamedFieldPuns #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wno-missing-signatures #-}
 
 module XMonad.A5ob7r (myxmonad) where
@@ -32,7 +30,7 @@ import XMonad.Prompt.Shell (shellPrompt)
 import XMonad.Prompt.Shell.Extra (getTerminal)
 import XMonad.Prompt.Window (WindowPrompt (..), allWindows, windowPrompt)
 import XMonad.Prompt.XMonad (xmonadPrompt)
-import qualified XMonad.StackSet as W
+import XMonad.StackSet qualified as W
 import XMonad.Util.Cursor (setDefaultCursor)
 import XMonad.Util.EZConfig.Extra (additionalKeys')
 import XMonad.Util.StickyWindows (stick, sticky, unstick)
