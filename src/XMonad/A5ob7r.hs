@@ -5,7 +5,7 @@
 module XMonad.A5ob7r (myxmonad) where
 
 import Data.List (find, intersperse)
-import Data.Maybe (fromMaybe, isJust)
+import Data.Maybe (isJust)
 import Graphics.X11.ExtraTypes.XF86
 import Graphics.X11.Xrandr (xrrGetMonitors, xrr_moninf_primary, xrr_moninf_width)
 import XMonad
@@ -114,13 +114,9 @@ myLayoutHook = full ||| tall
 mySB :: StatusBarConfig
 mySB = statusBarProp "xmobar" $ do
   wset <- gets windowset
-  dpy <- asks display
 
   -- Get the primary monitor's width(pixels).
-  width <-
-    let curWidth = rect_width . screenRect . W.screenDetail $ W.current wset
-        f = maybe (fromIntegral curWidth) xrr_moninf_width . find xrr_moninf_primary
-     in io $ f . fromMaybe [] <$> xrrGetMonitors dpy (defaultRootWindow dpy) True
+  width <- maybe (fromIntegral $ currentScreenWidth wset) xrr_moninf_width <$> primaryMonitor
 
   -- Assume single xmobar instance is only on the primary monitor.
   let curWS = W.workspace . W.current $ wset
@@ -149,6 +145,12 @@ mySB = statusBarProp "xmobar" $ do
   where
     xmobarColor' fg = xmobarColor fg $ background colorscheme
     xmobarUnderline = xmobarBorder "Bottom"
+
+    currentScreenWidth = rect_width . screenRect . W.screenDetail . W.current
+    primaryMonitor = do
+      dpy <- asks display
+      monitors <- io $ xrrGetMonitors dpy (defaultRootWindow dpy) True
+      pure $ monitors >>= find xrr_moninf_primary
 
     -- A monospace glyph width(pixels) on xmobar.
     glyphWidth = ceiling $ font_points * font_point_scale * inches_per_point * pixels_per_inch
