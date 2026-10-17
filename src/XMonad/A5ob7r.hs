@@ -122,17 +122,18 @@ mySB = statusBarProp "xmobar" $ do
    in return $
         xmobarPP
           { ppSep = "  ",
-            ppCurrent = xmobarUnderline (yellow colorscheme) 4 . xmobarColor' (yellow colorscheme) . wrap "[" "]",
-            ppVisible = xmobarUnderline (yellow colorscheme) 4 . wrap "(" ")",
-            ppHidden = xmobarUnderline (yellow colorscheme) 4,
-            ppUrgent = xmobarUnderline (yellow colorscheme) 4 . xmobarColor' (red colorscheme),
+            ppCurrent = xmobarUnderline (yellow colorscheme) . xmobarColor' (yellow colorscheme) . wrap "[" "]",
+            ppVisible = xmobarUnderline (yellow colorscheme) . wrap "(" ")",
+            ppHidden = xmobarUnderline (yellow colorscheme),
+            ppUrgent = xmobarUnderline (yellow colorscheme) . xmobarColor' (red colorscheme),
             ppWsSep = " ",
-            ppLayout = xmobarUnderline (yellow colorscheme) 4,
-            ppTitle = xmobarUnderline (yellow colorscheme) 4 . xmobarColor' (foreground colorscheme) . shortenFW availableTitleDisplayWidth
+            ppLayout = xmobarUnderline (yellow colorscheme),
+            ppTitle = xmobarUnderline (yellow colorscheme) . xmobarColor' (foreground colorscheme) . shortenFW availableTitleDisplayWidth
           }
   where
     xmobarColor' fg = xmobarColor fg $ background colorscheme
-    xmobarUnderline = xmobarBorder "Bottom"
+    xmobarUnderline color = xmobarBorder "Bottom" color xmobarUnderlineThickness
+    xmobarUnderlineThickness = 4 -- pixels
 
     lhsDisplayWidth wset = 1 + workspaceDisplayWidth wset + 2 + currentLayoutDisplayWidth wset + 2
     workspaceDisplayWidth wset =
