@@ -114,10 +114,10 @@ mySB = statusBarProp "xmobar" $ do
   wset <- gets windowset
 
   -- Get the primary monitor's width(pixels).
-  width <- maybe (fromIntegral $ currentScreenWidth wset) xrr_moninf_width <$> primaryMonitor
+  monitorWidthPixels <- maybe (fromIntegral $ currentScreenWidth wset) xrr_moninf_width <$> primaryMonitor
 
   -- Assume single xmobar instance is only on the primary monitor.
-  let availableDisplayWidth = fromIntegral width `div` glyphWidth
+  let availableDisplayWidth = fromIntegral monitorWidthPixels `div` glyphWidthPixels
       availableTitleDisplayWidth = max 5 $ availableDisplayWidth - (lhsDisplayWidth wset + rhsDisplayWidth wset)
    in return $
         xmobarPP
@@ -151,7 +151,7 @@ mySB = statusBarProp "xmobar" $ do
       pure $ monitors >>= find xrr_moninf_primary
 
     -- A monospace glyph width(pixels) on xmobar.
-    glyphWidth = ceiling $ font_points * font_point_scale * inches_per_point * pixels_per_inch
+    glyphWidthPixels = ceiling $ font_points * font_point_scale * inches_per_point * pixels_per_inch
     font_points = 30 -- from 'font' option in xmobar configuratioon
     font_point_scale = 1 / 2 -- for Hackgen(Halfwidth:Fullwidth = 1:2)
     inches_per_point = 1 / 72
