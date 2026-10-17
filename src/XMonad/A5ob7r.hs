@@ -117,18 +117,8 @@ mySB = statusBarProp "xmobar" $ do
   width <- maybe (fromIntegral $ currentScreenWidth wset) xrr_moninf_width <$> primaryMonitor
 
   -- Assume single xmobar instance is only on the primary monitor.
-  let curWS = W.workspace . W.current $ wset
-
-      nCharWS =
-        sum . intersperse 1 $
-          [2 + length (W.tag curWS)]
-            <> [2 + length (W.tag . W.workspace $ sc) | sc <- W.visible wset]
-            <> [length (W.tag hws) | hws <- W.hidden wset, isJust (W.stack hws)]
-      nCharLayout = length . description $ W.layout curWS
-      nCharLeft = 1 + nCharWS + 2 + nCharLayout + 2
-      nCharRight = 70
-      maxNChars = fromIntegral width `div` glyphWidth
-      nChar = max 5 $ maxNChars - (nCharLeft + nCharRight)
+  let availableDisplayWidth = fromIntegral width `div` glyphWidth
+      availableTitleDisplayWidth = max 5 $ availableDisplayWidth - (lhsDisplayWidth wset + rhsDisplayWidth wset)
    in return $
         xmobarPP
           { ppSep = "  ",
@@ -138,11 +128,21 @@ mySB = statusBarProp "xmobar" $ do
             ppUrgent = xmobarUnderline (yellow colorscheme) 4 . xmobarColor' (red colorscheme),
             ppWsSep = " ",
             ppLayout = xmobarUnderline (yellow colorscheme) 4,
-            ppTitle = xmobarUnderline (yellow colorscheme) 4 . xmobarColor' (foreground colorscheme) . shortenFW nChar
+            ppTitle = xmobarUnderline (yellow colorscheme) 4 . xmobarColor' (foreground colorscheme) . shortenFW availableTitleDisplayWidth
           }
   where
     xmobarColor' fg = xmobarColor fg $ background colorscheme
     xmobarUnderline = xmobarBorder "Bottom"
+
+    lhsDisplayWidth wset = 1 + workspaceDisplayWidth wset + 2 + currentLayoutDisplayWidth wset + 2
+    workspaceDisplayWidth wset =
+      sum . intersperse 1 $
+        [1 + length (W.currentTag wset) + 1] -- "[1]"
+          <> [1 + length (W.tag . W.workspace $ screen) + 1 | screen <- W.visible wset] -- "(2)"
+          <> [length . W.tag $ workspace | workspace <- W.hidden wset, hasWindow workspace] -- "3"
+    hasWindow = isJust . W.stack
+    currentLayoutDisplayWidth = length . description . W.layout . W.workspace . W.current
+    rhsDisplayWidth = const 70
 
     currentScreenWidth = rect_width . screenRect . W.screenDetail . W.current
     primaryMonitor = do
