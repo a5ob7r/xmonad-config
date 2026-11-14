@@ -22,11 +22,11 @@ jobs:
           - '9.14'
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
-      - uses: haskell-actions/setup@v2
+      - uses: haskell-actions/setup@v2.12.1
         id: setup-haskell
         with:
           ghc-version: ${{ matrix.ghc }}
@@ -34,7 +34,7 @@ jobs:
       - name: Freeze dependencies
         run: cabal freeze
 
-      - uses: actions/cache@v6
+      - uses: actions/cache@v6.1.0
         with:
           path: ${{ steps.setup-haskell.outputs.cabal-store }}
           key: build-${{ runner.os }}-${{ matrix.ghc }}-${{ hashFiles('cabal.project.freeze') }}
@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
@@ -72,7 +72,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
@@ -87,13 +87,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
-      - uses: haskell-actions/hlint-setup@v2
+      - uses: haskell-actions/hlint-setup@v2.4.10
 
-      - uses: haskell-actions/hlint-run@v2
+      - uses: haskell-actions/hlint-run@v2.4.10
         with:
           fail-on: status
 
@@ -101,7 +101,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
@@ -116,7 +116,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
