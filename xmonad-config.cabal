@@ -41,7 +41,6 @@ library
   other-modules:
     XMonad.Actions.WindowGo.Extra
     XMonad.Config.A5ob7r.ColorScheme
-    XMonad.Hooks.StatusBar.PP.Extra
     XMonad.Operations.Extra
     XMonad.Prompt.Shell.Extra
     XMonad.Util.EZConfig.Extra

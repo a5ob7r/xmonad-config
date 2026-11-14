@@ -3,7 +3,8 @@ Config { font = "Monospace Bold 30"
        , bgColor = "#16242c"
        , fgColor = "#c0c4cd"
        , position = BottomH 50
-       , template = " %XMonadLog% }{ %memory%  %cpu%  %alsa:default:Master%  %bright%  %battery%  %date% "
+       --  The left section can be trimmed and the right section must be always fully drawn.
+       , template = "} %XMonadLog% { %memory%  %cpu%  %alsa:default:Master%  %bright%  %battery%  %date% "
        , commands = [ Run XMonadLog
                     , Run Alsa "default" "Master" [ "-t", "<box type=Bottom width=4 color=#fac862><status> <volume>%</box>"
                                                   , "--"

@@ -2,10 +2,7 @@
 
 module XMonad.A5ob7r (myxmonad) where
 
-import Data.List (find, intersperse)
-import Data.Maybe (isJust)
 import Graphics.X11.ExtraTypes.XF86
-import Graphics.X11.Xrandr (xrrGetMonitors, xrr_moninf_primary, xrr_moninf_width)
 import XMonad
 import XMonad.Actions.EasyMotion (selectWindow)
 import XMonad.Actions.WindowGo (raiseBrowser)
@@ -17,7 +14,6 @@ import XMonad.Hooks.Rescreen (RescreenConfig (..), rescreenHook)
 import XMonad.Hooks.Script (execScriptHook)
 import XMonad.Hooks.StatusBar (StatusBarConfig, defToggleStrutsKey, statusBarProp, withEasySB)
 import XMonad.Hooks.StatusBar.PP (PP (..), wrap, xmobarBorder, xmobarColor, xmobarPP)
-import XMonad.Hooks.StatusBar.PP.Extra (shortenFW)
 import XMonad.Layout.FocusTracking (focusTracking)
 import XMonad.Layout.IfMax (IfMax (IfMax))
 import XMonad.Layout.Renamed (named)
@@ -110,53 +106,23 @@ myLayoutHook = full ||| tall
     ratio = 1 / 2
 
 mySB :: StatusBarConfig
-mySB = statusBarProp "xmobar" $ do
-  wset <- gets windowset
-
-  -- Get the primary monitor's width(pixels).
-  monitorWidthPixels <- maybe (fromIntegral $ currentScreenWidth wset) xrr_moninf_width <$> primaryMonitor
-
-  -- Assume single xmobar instance is only on the primary monitor.
-  let availableDisplayWidth = fromIntegral monitorWidthPixels `div` glyphWidthPixels
-      availableTitleDisplayWidth = max 5 $ availableDisplayWidth - (lhsDisplayWidth wset + rhsDisplayWidth wset)
-   in return $
-        xmobarPP
-          { ppSep = "  ",
-            ppCurrent = xmobarUnderline (yellow colorscheme) . xmobarColor' (yellow colorscheme) . wrap "[" "]",
-            ppVisible = xmobarUnderline (yellow colorscheme) . wrap "(" ")",
-            ppHidden = xmobarUnderline (yellow colorscheme),
-            ppUrgent = xmobarUnderline (yellow colorscheme) . xmobarColor' (red colorscheme),
-            ppWsSep = " ",
-            ppLayout = xmobarUnderline (yellow colorscheme),
-            ppTitle = xmobarUnderline (yellow colorscheme) . xmobarColor' (foreground colorscheme) . shortenFW availableTitleDisplayWidth
-          }
+mySB =
+  statusBarProp "xmobar" $
+    return
+      xmobarPP
+        { ppSep = "  ",
+          ppCurrent = xmobarUnderline (yellow colorscheme) . xmobarColor' (yellow colorscheme) . wrap "[" "]",
+          ppVisible = xmobarUnderline (yellow colorscheme) . wrap "(" ")",
+          ppHidden = xmobarUnderline (yellow colorscheme),
+          ppUrgent = xmobarUnderline (yellow colorscheme) . xmobarColor' (red colorscheme),
+          ppWsSep = " ",
+          ppLayout = xmobarUnderline (yellow colorscheme),
+          ppTitle = xmobarUnderline (yellow colorscheme) . xmobarColor' (foreground colorscheme)
+        }
   where
     xmobarColor' fg = xmobarColor fg $ background colorscheme
     xmobarUnderline color = xmobarBorder "Bottom" color xmobarUnderlineThickness
     xmobarUnderlineThickness = 4 -- pixels
-
-    lhsDisplayWidth wset = 1 + workspaceDisplayWidth wset + 2 + currentLayoutDisplayWidth wset + 2
-    workspaceDisplayWidth wset =
-      sum . intersperse 1 $
-        [1 + length (W.currentTag wset) + 1] -- "[1]"
-          <> [1 + length (W.tag . W.workspace $ screen) + 1 | screen <- W.visible wset] -- "(2)"
-          <> [length . W.tag $ workspace | workspace <- W.hidden wset, hasWindow workspace] -- "3"
-    hasWindow = isJust . W.stack
-    currentLayoutDisplayWidth = length . description . W.layout . W.workspace . W.current
-    rhsDisplayWidth = const 70
-
-    currentScreenWidth = rect_width . screenRect . W.screenDetail . W.current
-    primaryMonitor = do
-      dpy <- asks display
-      monitors <- io $ xrrGetMonitors dpy (defaultRootWindow dpy) True
-      pure $ monitors >>= find xrr_moninf_primary
-
-    -- A monospace glyph width(pixels) on xmobar.
-    glyphWidthPixels = ceiling $ fontPoints * fontPointScale * inchesPerPoint * pixelsPerInch
-    fontPoints = 30 -- from 'font' option in xmobar configuratioon
-    fontPointScale = 1 / 2 -- for Hackgen(Halfwidth:Fullwidth = 1:2)
-    inchesPerPoint = 1 / 72
-    pixelsPerInch = 96 :: Rational -- DPI
 
 colorscheme :: OceanicNext
 colorscheme = OceanicNext
