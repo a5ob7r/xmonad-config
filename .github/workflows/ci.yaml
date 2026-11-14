@@ -23,6 +23,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - uses: haskell-actions/setup@v2
         id: setup-haskell
@@ -60,6 +62,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Run ormolu
         uses: haskell-actions/run-ormolu@v21
@@ -69,6 +73,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - uses: tfausak/cabal-gild-setup-action@v2
 
@@ -82,6 +88,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - uses: haskell-actions/hlint-setup@v2
 
@@ -94,6 +102,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Run shellcheck
         run: |
@@ -107,6 +117,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Run actionlint
         run: |
