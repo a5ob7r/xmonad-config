@@ -8,9 +8,9 @@ workflows:
         - 'actions/checkout@v7.0.1'
         - 'haskell-actions/hlint-run@v2.4.10'
         - 'haskell-actions/hlint-setup@v2.4.10'
-        - 'haskell-actions/run-ormolu@v21'
         - 'haskell-actions/setup@v2.12.1'
         - 'tfausak/cabal-gild-setup-action@v2'
+        - 'tfausak/ormolu-setup-action@v1'
     '.github/workflows/verify-lockfile.yaml':
         - 'actions/checkout@v7.0.1'
 dependencies:
@@ -34,11 +34,6 @@ dependencies:
         commit: 'sha1-fe9cd1cd1af94a23900c06738e73f6ddb092966a'
         owner_id: 75048950
         repo_id: 692590623
-    'haskell-actions/run-ormolu@v21':
-        ref: 'v21'
-        commit: 'sha1-f15613427428a49a241fa0331881dcf4cc118121'
-        owner_id: 75048950
-        repo_id: 302912947
     'haskell-actions/setup@v2.12.1':
         ref: 'v2.12.1'
         commit: 'sha1-0f8e8c99d88aeb3fbfd523f1ef2c6f762d10d64d'
@@ -49,3 +44,8 @@ dependencies:
         commit: 'sha1-1639b48019c070533ec2fb52cb802100b7e357a5'
         owner_id: 408753
         repo_id: 758617713
+    'tfausak/ormolu-setup-action@v1':
+        ref: 'v1'
+        commit: 'sha1-db10716abc1916b53ee729239a1685ce0c01ddfe'
+        owner_id: 408753
+        repo_id: 1053737895

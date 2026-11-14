@@ -65,8 +65,12 @@ jobs:
         with:
           persist-credentials: false
 
+      - uses: tfausak/ormolu-setup-action@v1
+
       - name: Run ormolu
-        uses: haskell-actions/run-ormolu@v21
+        run: |
+          # shellcheck disable=SC2046
+          ormolu --mode check $(git ls-files '*.hs')
 
   cabal-format:
     runs-on: ubuntu-latest
